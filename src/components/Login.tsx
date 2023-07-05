@@ -1,30 +1,31 @@
 import { FormEvent, useState } from 'react';
-import { Link, redirect } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import Home from './Home';
 
 function Login() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
-  type RedirectFunction = (
-    url: string,
-    init?: number | ResponseInit
-  ) => Response;
+  const navigate = useNavigate();
 
-  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //Reset email and password fields
-    setName('');
-    setEmail('');
     //Authenticate user
-    fetch('https://frontend-take-home-service.fetch.com/auth/login', {
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify({ name, email }),
-      headers: { 'Content-type': 'application/json' }
-    })
-    .then(res => console.log(res))
-    .then(() => redirect("/home"))
-    .catch(err => console.log(err))
+    try {
+      const auth = await fetch('https://frontend-take-home-service.fetch.com/auth/login', {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({ name, email }),
+        headers: { 'Content-type': 'application/json' }
+      });
+      console.log(auth)
+      //Reset email and password fields
+      setName('');
+      setEmail('');
+      navigate("/home")
+    } catch (error) {
+      console.log(error)      
+    }
   }
 
   return (
@@ -38,6 +39,8 @@ function Login() {
         <br/>
         <button type='submit'>Submit</button>
       </form>
+      <br/>
+      <Link to='home'>Go Home!</Link>
     </div>
   )
 }
