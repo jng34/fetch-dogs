@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { v4 } from 'uuid';
+import Dogs from './Dogs';
 
-function Home() {
+export default function Home() {
   const [dogs, setDogs] = useState([]);
+  const [breed, setBreed] = useState("");
 
   useEffect(() => {
     fetch('https://frontend-take-home-service.fetch.com/dogs/breeds', {
@@ -13,23 +16,29 @@ function Home() {
     .then(data => setDogs(data));
   }, [])
 
-  console.log(dogs)
-  let i = 0;
-
   const renderDogBreeds = 
-    dogs.map((breed: string) => (
-      <li key={i++}>{breed}</li>
+    dogs.map((breed) => (
+      <option key={v4()} value={breed}>{breed}</option>
     ))
+
+  const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    console.log(e.target.value);
+    setBreed(e.target.value);
+  }
 
   return (
     <div>
       <header>
         Home of Fetch Dogs!
       </header>
-      <ul>{renderDogBreeds}</ul>
+      <br/>
+      <label>
+        Search by breed:&nbsp;&nbsp;
+        <select value={breed} onChange={handleSelect}>
+          {renderDogBreeds}
+        </select>
+      </label>
+      <Dogs breed={breed}/>
     </div>
   )
 }
-
-
-export default Home;
