@@ -1,10 +1,9 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { v4 } from 'uuid';
 import Dogs from './Dogs';
 
 export default function Home() {
   const [dogs, setDogs] = useState([]);
-  const [breed, setBreed] = useState("");
+  const [breed, setBreed] = useState('');
 
   useEffect(() => {
     fetch('https://frontend-take-home-service.fetch.com/dogs/breeds', {
@@ -16,16 +15,22 @@ export default function Home() {
     .then(data => setDogs(data));
   }, [])
 
+  let i=0;
   const renderDogBreeds = 
     dogs.map((breed) => (
-      <option key={v4()} value={breed}>{breed}</option>
+      <option key={i++} value={breed}>{breed}</option>
     ))
+
+  
 
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     console.log(e.target.value);
     setBreed(e.target.value);
   }
 
+  // const handleSubmit = () => {
+  //   setBreed(breed)
+  // }
   return (
     <div>
       <header>
