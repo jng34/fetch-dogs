@@ -1,40 +1,29 @@
-import { createContext, useContext, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import useLocalStorage from "./useLocalStorage";
+import { createContext, ReactNode, useState } from "react";
 
-const AuthContext = createContext();
 
-interface User {
-  name: string,
-  email: string
+type Props = {
+  children?: ReactNode;
 }
 
-export const AuthProvider = () => {
-  const [user, setUser] = useLocalStorage("user", null);
-  const navigate = useNavigate();
-
-  const login = async (data: User) => {
-    setUser(data);
-    navigate("/home");
-  };
-
-  const logout = () => {
-    setUser(null);
-    navigate("/", { replace: true });
-  };
-
-  const value = useMemo(
-    () => ({
-      user,
-      login,
-      logout
-    }),
-    [user]
-  );
-  
-  return <AuthContext.Provider value={value}></AuthContext.Provider>;
+type IAuthContext = {
+  authenticated: boolean;
+  setAuthenticated: (newState: boolean) => void
 }
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+const initialValue = {
+  authenticated: false,
+  setAuthenticated: () => {}
+}
+
+const AuthContext = createContext<IAuthContext>(initialValue);
+
+const AuthProvider = ({ children }: Props) => {
+  const [authenticated, setAuthenticated] = useState(initialValue.authenticated);
+  return (
+    <AuthContext.Provider value={{authenticated, setAuthenticated}}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export { AuthContext, AuthProvider }

@@ -1,9 +1,12 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import Dogs from './Dogs';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const [dogs, setDogs] = useState([]);
   const [breed, setBreed] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('https://frontend-take-home-service.fetch.com/dogs/breeds', {
@@ -21,16 +24,11 @@ export default function Home() {
       <option key={i++} value={breed}>{breed}</option>
     ))
 
-  
-
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     console.log(e.target.value);
     setBreed(e.target.value);
   }
 
-  // const handleSubmit = () => {
-  //   setBreed(breed)
-  // }
   return (
     <div>
       <header>
@@ -43,7 +41,8 @@ export default function Home() {
           {renderDogBreeds}
         </select>
       </label>
-      <Dogs breed={breed}/>
+      <br/>
+      <Link to={"/dogs"}>Check out Dogs</Link>
     </div>
   )
 }

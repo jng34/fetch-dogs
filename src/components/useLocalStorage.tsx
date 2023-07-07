@@ -5,8 +5,10 @@ interface User {
   email: string
 }
 
+// Connects local storage with state objects
+
 export default function useLocalStorage(key: string, value: User | null) {
-  const [storedValue, setStoredValue] = useState(() => {
+  const [storedSession, setStoreSession] = useState(() => {
     try {
       const val = window.localStorage.getItem(key);
       if (val) {
@@ -20,11 +22,17 @@ export default function useLocalStorage(key: string, value: User | null) {
       return value;
     }
   });
-  const setValue = (newValue: User) => {
+
+  const setSession = (key: string, newValue: User | null) => {
     try {
       window.localStorage.setItem(key, JSON.stringify(newValue));
     } catch (err) {}
-    setStoredValue(newValue);
+    setStoreSession(newValue);
   };
-  return [storedValue, setValue];
+
+  const removeSession = () => {
+    window.localStorage.removeItem(key)
+  }
+
+  return [storedSession, setSession, removeSession];
 };

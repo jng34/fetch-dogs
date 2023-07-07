@@ -1,20 +1,9 @@
-import { useEffect, useState } from "react";
-
-interface Dog {
-  id: string
-  img: string
-  name: string
-  age: number
-  zip_code: string
-  breed: string
-}
-
-export default function DogCard({ dogObj }: Dog) {
-
+export default function DogCard({ dogObj }: any) {
+  const { img, name, age, zip_code, breed } = dogObj;
   return (
     <li>
-      <img src={dogObj.img} style={{ width: '100px', height: '100px '}}/>
-      {dogObj.name}
+      <img src={img} style={{ width: '100px', height: '100px' }}/>
+      {name}
     </li>
   )
 }
