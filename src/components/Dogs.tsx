@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import DogCard from "./DogCard";
+import { Row, Col } from "react-bootstrap";
 
 interface DogSearch {
   breed?: string,
@@ -7,11 +8,18 @@ interface DogSearch {
   ageMin?: string,
   ageMax?: string,
 }
+interface Dog {
+    id: string
+    img: string
+    name: string
+    age: number
+    zip_code: string
+    breed: string
+}
 
 export default function Dogs({ breed, zipCode, ageMin, ageMax }: DogSearch) {
   const [dogObjs, setDogObjs] = useState([]);
 
-  //render all dogs of breed
   useEffect(() => {
     fetch(`https://frontend-take-home-service.fetch.com/dogs/search`, {
       method: 'GET',
@@ -22,14 +30,6 @@ export default function Dogs({ breed, zipCode, ageMin, ageMax }: DogSearch) {
     .then(data => getDogObjs(data.resultIds))
   }, [breed])
 
-  interface Dog {
-      id: string
-      img: string
-      name: string
-      age: number
-      zip_code: string
-      breed: string
-  }
   
   function getDogObjs(arr: Dog[]) {
     fetch("https://frontend-take-home-service.fetch.com/dogs", {
@@ -42,14 +42,20 @@ export default function Dogs({ breed, zipCode, ageMin, ageMax }: DogSearch) {
     .then(data => setDogObjs(data))
   }
 
-  const renderDogs = dogObjs.map((dogObj: Dog) => (
-    <DogCard key={dogObj.id} dogObj={dogObj} />
-  ))
+  // const renderDogs = dogObjs.map((dogObj: Dog) => (
+  //   <DogCard key={dogObj.id} dogObj={dogObj} />
+  // ))
 
   return (
     <div>
       <header>All dogs in a breed</header>
-      <ul>{renderDogs}</ul>
+      <Row xs={1} md={5} className="g-4">
+        {Array.from(dogObjs).map((dogObj: Dog, idx) => (
+          <Col key={idx}>
+            <DogCard dogObj={dogObj} />
+          </Col>
+        ))}
+      </Row>
     </div>
   )
 }

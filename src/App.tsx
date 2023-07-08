@@ -7,8 +7,8 @@ import Dogs from './components/Dogs';
 type Props = {}
 
 const AuthRoutes = () => {
-  const user = localStorage.getItem('user');
-  if (!user) return <Navigate to='/' replace />
+  const checkUser = localStorage.getItem('user');
+  if (!checkUser) return <Navigate to='/' replace />
   return <Outlet />
 }
 

@@ -1,5 +1,6 @@
-import { FormEvent, useState, useEffect, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { FormEvent, useState } from 'react';
+import { useNavigate,  Navigate } from 'react-router-dom';
+
 
 export default function Login() {
   const [name, setName] = useState('');
@@ -29,7 +30,7 @@ export default function Login() {
         headers: { 'Content-type': 'application/json' }
       });
       if (auth.status === 200) {
-        localStorage.setItem('user', JSON.stringify({ name, email }))
+        localStorage.setItem('user', name)
         navigate("/home");
       } 
     } catch (error) {
@@ -37,18 +38,13 @@ export default function Login() {
     }
   }
 
-  const handleLogOut = () => {
-    localStorage.removeItem('user');
-    navigate("/");
-  }
-
   //Check if session exists
   const user = localStorage.getItem('user'); 
+  if (user) return <Navigate to="/home" replace={true} />
 
   return (
     <div>
       <header>Fetch a dog today!</header>
-      {!user ? 
         <form onSubmit={handleLogin}>
           <label>Name</label><br/>
           <input type='text' value={name} onChange={(e) => setName(e.target.value)}></input>
@@ -59,13 +55,6 @@ export default function Login() {
           {!errors.invalidEmail ? <span style={{ color: 'red' }}>{errors.invalidEmail}</span> : <></>}<br/>
           <button type='submit'>Submit</button>
         </form>
-        :
-        <div>
-          <Link to='/home'>Go Home!</Link><br/>
-          <Link to='/dogs'>Check out Dogs!</Link><br/>
-          <button onClick={handleLogOut}>Log out</button>
-        </div>
-      }
     </div>
   )
 }

@@ -28,11 +28,16 @@ export default function Home() {
     console.log(e.target.value);
     setBreed(e.target.value);
   }
+  
+  const handleLogOut = () => {
+    localStorage.removeItem('user');
+    navigate("/");
+  }
 
   return (
     <div>
       <header>
-        Home of Fetch Dogs!
+        Welcome to Fetch Dogs!
       </header>
       <br/>
       <label>
@@ -43,6 +48,8 @@ export default function Home() {
       </label>
       <br/>
       <Link to={"/dogs"}>Check out Dogs</Link>
+      <br/>
+      <button onClick={handleLogOut}>Log out</button>
     </div>
   )
 }
