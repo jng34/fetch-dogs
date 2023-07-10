@@ -44,7 +44,8 @@ export default function Login() {
 
   return (
     <div>
-      <header>Fetch a dog today!</header>
+      <h1>Fetch Dog</h1>
+      <h3>Save and bring home a dog today!</h3>
         <form onSubmit={handleLogin}>
           <label>Name</label><br/>
           <input type='text' value={name} onChange={(e) => setName(e.target.value)}></input>

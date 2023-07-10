@@ -1,9 +1,9 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import Dogs from './Dogs';
 import { Link, useNavigate } from 'react-router-dom';
+import Dogs from './Dogs';
 
 export default function Home() {
-  const [dogs, setDogs] = useState([]);
+  const [dogBreeds, setDogBreeds] = useState([]);
   const [breed, setBreed] = useState('');
 
   const navigate = useNavigate();
@@ -15,12 +15,12 @@ export default function Home() {
       headers: { 'Content-type': 'application/json' }
     })
     .then(res => res.json())
-    .then(data => setDogs(data));
+    .then(data => setDogBreeds(data));
   }, [])
 
   let i=0;
   const renderDogBreeds = 
-    dogs.map((breed) => (
+    dogBreeds.map((breed) => (
       <option key={i++} value={breed}>{breed}</option>
     ))
 
@@ -40,16 +40,17 @@ export default function Home() {
         Welcome to Fetch Dogs!
       </header>
       <br/>
+      <button onClick={handleLogOut}>Log out</button>
+      <br/>
       <label>
         Search by breed:&nbsp;&nbsp;
         <select value={breed} onChange={handleSelect}>
+          <option value="">All</option>
           {renderDogBreeds}
         </select>
       </label>
       <br/>
-      <Link to={"/dogs"}>Check out Dogs</Link>
-      <br/>
-      <button onClick={handleLogOut}>Log out</button>
+      <Dogs breed={breed} />
     </div>
   )
 }
