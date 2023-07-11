@@ -1,6 +1,15 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Dogs from './Dogs';
+
+interface Dog {
+  id: string
+  img: string
+  name: string
+  age: number
+  zip_code: string
+  breed: string
+}
 
 export default function Home() {
   const [dogBreeds, setDogBreeds] = useState([]);
@@ -18,6 +27,7 @@ export default function Home() {
     .then(data => setDogBreeds(data));
   }, [])
 
+
   let i=0;
   const renderDogBreeds = 
     dogBreeds.map((breed) => (
@@ -34,10 +44,12 @@ export default function Home() {
     navigate("/");
   }
 
+  const userName = localStorage.getItem('user'); 
+
   return (
     <div>
       <header>
-        Welcome to Fetch Dogs!
+        Welcome to Fetch Dogs, {userName}!
       </header>
       <br/>
       <button onClick={handleLogOut}>Log out</button>

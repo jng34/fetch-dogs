@@ -2,8 +2,16 @@ import classnames from 'classnames';
 import { usePagination, DOTS } from './usePagination';
 import '../index.css';
 
+interface PageProps {
+  className: string,
+  totalCount: number,
+  currentPage: number,
+  pageSize: number,
+  siblingCount?: number,
+  onPageChange: (page: number) => void
+}
 
-export default function Pagination(props: any) {
+export default function Pagination(props: PageProps) {
   const {
     onPageChange,
     totalCount,
@@ -47,17 +55,17 @@ export default function Pagination(props: any) {
       >
         <div className="arrow left" />
       </li>
-      {paginationRange.map((pageNumber: any) => {
+      {paginationRange.map((pageNumber: any, idx: number) => {
          
         // If the pageItem is a DOT, render the DOTS unicode character
         if (pageNumber === DOTS) {
-          return <li key={pageNumber} className="pagination-item dots">&#8230;</li>;
+          return <li key={"dots"} className="pagination-item dots">&#8230;</li>;
         }
 		
         // Render our Page Pills
         return (
           <li
-            key={pageNumber}
+            key={idx}
             className={classnames('pagination-item', {
               selected: pageNumber === currentPage
             })}
