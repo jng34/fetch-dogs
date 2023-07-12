@@ -4,11 +4,12 @@ import '../index.css';
 interface PageProps {
   className: string,
   currentPage: number,
+  disableNext: boolean,
   onPageChange: (page: number) => void
 }
 
 export default function SimplePagination(props: PageProps) {
-  const { className, currentPage, onPageChange } = props;
+  const { className, currentPage, disableNext, onPageChange } = props;
 
   const onNext = () => {
     onPageChange(currentPage + 1);
@@ -34,7 +35,9 @@ export default function SimplePagination(props: PageProps) {
       
       {/*  Right Navigation arrow */}
       <li
-        className='pagination-item'
+        className={classnames('pagination-item', {
+          disabled: disableNext
+        })}
         onClick={onNext}
       >
         Next &nbsp;<div className="arrow right" />

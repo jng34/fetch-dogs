@@ -14,13 +14,14 @@ interface Dog {
 
 export default function Dogs() {
   const [dogObjs, setDogObjs] = useState([]);
+  const [totalDogs, setTotalDogs] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchIndex, setSearchIndex] = useState(0);
   
   const navigate = useNavigate();
 
   const { state } = useLocation();
-  const { breeds, zipCodes, minAge, maxAge } = state;
+  // const { breeds, zipCodes, minAge, maxAge } = state;
   
   const displaySize = 7;
 
@@ -36,6 +37,7 @@ export default function Dogs() {
     })
       .then((res) => res.json())
       .then((data) => {
+        setTotalDogs(data.total);    
         getDogObjs(data.resultIds);
       });
   }
@@ -59,10 +61,12 @@ export default function Dogs() {
     setSearchIndex((page - 1) * displaySize)
   }
 
+  const disableNext = (searchIndex + displaySize) >= totalDogs;
+
   return (
     <div>
-      <button onClick={() => navigate('/home')}>Back to Search</button>
-      <table id="dogTable">
+      <button style={{ margin: '30px 0 30px 30px' }}onClick={() => navigate('/home')}>Back to Search</button>
+      <table style={{ marginLeft: '30px' }} id="dogTable">
         <thead>
           <tr>
             <th>PIC</th>
@@ -91,6 +95,7 @@ export default function Dogs() {
       <SimplePagination 
         className="pagination-bar"  
         currentPage={currentPage}
+        disableNext={disableNext}
         onPageChange={(page: number) => handlePageChange(page)}
       />
     </div>

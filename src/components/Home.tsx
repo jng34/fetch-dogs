@@ -26,6 +26,11 @@ export default function Home() {
     .then(data => setDogBreeds(data));
   }
 
+  const handleLogOut = () => {
+    localStorage.removeItem('user');
+    navigate('/');
+  }
+
   let i=0;
 
   const handleSelectBreed = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -57,11 +62,11 @@ export default function Home() {
     })
   }
   
-
   return (
     <div className='pageLayout'>
       <header>
         Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ''}!
+        <button style={{ marginLeft: '100px' }} onClick={handleLogOut}>Log Out</button>
       </header>
       <h4>Search:</h4>
       <form onSubmit={handleSearchDogs}>
