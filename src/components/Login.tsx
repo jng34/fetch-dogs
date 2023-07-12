@@ -31,7 +31,7 @@ export default function Login() {
       });
       if (auth.status === 200) {
         localStorage.setItem('user', name)
-        navigate("/home");
+        navigate("/home", { state: { name } });
       } 
     } catch (error) {
       navigate("/error")    

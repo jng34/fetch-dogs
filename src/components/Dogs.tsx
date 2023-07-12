@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import DogCard from "./DogCard";
-import { Row, Col } from "react-bootstrap";
 import Pagination from "./Pagination";
 import "../index.css";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface Props {
   breed?: string
@@ -27,9 +27,13 @@ interface Dog {
 export default function Dogs({ breed }: Props) {
   const [dogObjs, setDogObjs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { breeds, zipCodes, minAge, maxAge } = location.state;
 
   useEffect(() => {
-    fetch(`https://frontend-take-home-service.fetch.com/dogs/search`, {
+    fetch('https://frontend-take-home-service.fetch.com/dogs/search', {
       method: "GET",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -52,7 +56,7 @@ export default function Dogs({ breed }: Props) {
       .then((data) => setDogObjs(data));
   }
 
-  let PageSize = 6;
+  let PageSize = 10;
 
   const currentDogsToDisplay = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -62,6 +66,7 @@ export default function Dogs({ breed }: Props) {
 
   return (
     <div>
+      <button onClick={() => navigate('/home')}>Back to Search</button>
       <table id="dogTable">
         <thead>
           <tr>
@@ -75,8 +80,8 @@ export default function Dogs({ breed }: Props) {
         <tbody>
           {(currentDogsToDisplay.length > 0
             ? currentDogsToDisplay
-            : dogObjs
-          ).map((dogObj: Dog) => {
+            : dogObjs.slice(0, PageSize)
+          ).map((dogObj: Dog, idx: number) => {
             return (
               <tr key={dogObj.id}>
                 <td>
@@ -98,14 +103,6 @@ export default function Dogs({ breed }: Props) {
         pageSize={PageSize}
         onPageChange={(page: number) => setCurrentPage(page)}
       />
-      {/* <header>All {breed ? <b>{breed}s</b> : "Dogs"}</header>
-        <Row xs={1} md={5} className="g-4">
-          {Array.from(dogObjs).map((dogObj: Dog, idx) => (
-            <Col key={idx}>
-              <DogCard dogObj={dogObj} />
-            </Col>
-          ))}
-        </Row> */}
     </div>
   );
 }

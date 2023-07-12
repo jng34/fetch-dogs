@@ -79,6 +79,7 @@ export default function Pagination(props: PageProps) {
       <li
         className={classnames('pagination-item', {
           disabled: currentPage === lastPage
+          // disabled: currentPage === lastPage
         })}
         onClick={onNext}
       >
