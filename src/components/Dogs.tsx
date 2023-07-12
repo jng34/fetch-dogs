@@ -1,19 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
-import DogCard from "./DogCard";
-import Pagination from "./Pagination";
+import { useEffect, useState } from "react";
 import "../index.css";
 import { useLocation, useNavigate } from "react-router-dom";
-
-interface Props {
-  breed?: string
-}
-
-// interface DogSearch {
-//   breed?: string;
-//   zipCode?: string;
-//   ageMin?: string;
-//   ageMax?: string;
-// }
+import SimplePagination from "./SimplePagination";
 
 interface Dog {
   id: string;
@@ -24,28 +12,35 @@ interface Dog {
   breed: string;
 }
 
-export default function Dogs({ breed }: Props) {
+export default function Dogs() {
   const [dogObjs, setDogObjs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchIndex, setSearchIndex] = useState(0);
   
   const navigate = useNavigate();
-  const location = useLocation();
-  const { breeds, zipCodes, minAge, maxAge } = location.state;
+
+  const { state } = useLocation();
+  const { breeds, zipCodes, minAge, maxAge } = state;
+  
+  const displaySize = 7;
 
   useEffect(() => {
-    fetch('https://frontend-take-home-service.fetch.com/dogs/search', {
+    getDogIds();
+  }, [searchIndex]);
+
+  const getDogIds = () => {
+    fetch(`https://frontend-take-home-service.fetch.com/dogs/search?size=${displaySize}&from=${searchIndex}`, {
       method: "GET",
       credentials: "include",
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         getDogObjs(data.resultIds);
       });
-  }, []);
+  }
 
-  function getDogObjs(arr: Dog[]) {
+  const getDogObjs = (arr: Dog[]) => {
     fetch("https://frontend-take-home-service.fetch.com/dogs", {
       method: "POST",
       credentials: "include",
@@ -53,16 +48,16 @@ export default function Dogs({ breed }: Props) {
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
-      .then((data) => setDogObjs(data));
+      .then((data) => {
+        setDogObjs(data);
+      });
   }
 
-  let PageSize = 10;
 
-  const currentDogsToDisplay = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return dogObjs.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    setSearchIndex((page - 1) * displaySize)
+  }
 
   return (
     <div>
@@ -78,14 +73,11 @@ export default function Dogs({ breed }: Props) {
           </tr>
         </thead>
         <tbody>
-          {(currentDogsToDisplay.length > 0
-            ? currentDogsToDisplay
-            : dogObjs.slice(0, PageSize)
-          ).map((dogObj: Dog, idx: number) => {
+          {dogObjs.map((dogObj: Dog) => {
             return (
               <tr key={dogObj.id}>
                 <td>
-                  <img src={dogObj.img} style={{ width: "5rem" }} />
+                  <img src={dogObj.img} style={{ width: "5rem", height: "5rem" }} />
                 </td>
                 <td>{dogObj.name}</td>
                 <td>{dogObj.age}</td>
@@ -96,12 +88,10 @@ export default function Dogs({ breed }: Props) {
           })}
         </tbody>
       </table>
-      <Pagination
-        className="pagination-bar"
+      <SimplePagination 
+        className="pagination-bar"  
         currentPage={currentPage}
-        totalCount={dogObjs.length}
-        pageSize={PageSize}
-        onPageChange={(page: number) => setCurrentPage(page)}
+        onPageChange={(page: number) => handlePageChange(page)}
       />
     </div>
   );

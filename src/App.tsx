@@ -4,15 +4,14 @@ import Login from './components/Login';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Dogs from './components/Dogs';
 
-type Props = {}
-
+// Serves as an authorization middleware
 const AuthRoutes = () => {
   const checkUser = localStorage.getItem('user');
   if (!checkUser) return <Navigate to='/' replace />
   return <Outlet />
 }
 
-export default function App(props: Props) {
+export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />

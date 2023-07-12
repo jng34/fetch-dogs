@@ -1,16 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import Dogs from './Dogs';
-import { Placeholder } from 'react-bootstrap';
-
-interface Dog {
-  id: string
-  img: string
-  name: string
-  age: number
-  zip_code: string
-  breed: string
-}
+import { useLocation, useNavigate } from 'react-router-dom';
+import '../index.css';
 
 export default function Home() {
   const [dogBreeds, setDogBreeds] = useState([]);
@@ -21,9 +11,12 @@ export default function Home() {
 
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { name } = state;
 
   useEffect(() => {
+    getBreeds()
+  }, [])
+  
+  function getBreeds() {
     fetch('https://frontend-take-home-service.fetch.com/dogs/breeds', {
       method: 'GET',
       credentials: 'include',
@@ -31,8 +24,7 @@ export default function Home() {
     })
     .then(res => res.json())
     .then(data => setDogBreeds(data));
-  }, [])
-
+  }
 
   let i=0;
 
@@ -65,19 +57,12 @@ export default function Home() {
     })
   }
   
-  const handleLogOut = () => {
-    localStorage.removeItem('user');
-    navigate("/");
-  }
 
   return (
-    <div>
+    <div className='pageLayout'>
       <header>
-        Welcome to Fetch Dogs, {name}!
+        Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ''}!
       </header>
-      <br/>
-      <button onClick={handleLogOut}>Log out</button>
-      <br/>
       <h4>Search:</h4>
       <form onSubmit={handleSearchDogs}>
         <label>Breed:&nbsp;&nbsp;</label>
@@ -98,7 +83,6 @@ export default function Home() {
         <input type='number' name='maxAge' onChange={handleMaxAge} max={100} maxLength={3} />
           <br/>
         <input type='submit' value='Search Dogs' />
-        {/* <Dogs breed={breed} /> */}
       </form>
     </div>
   )

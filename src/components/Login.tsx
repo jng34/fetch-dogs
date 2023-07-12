@@ -1,8 +1,9 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate,  Navigate } from 'react-router-dom';
-
+import { useNavigate,  Navigate, Link } from 'react-router-dom';
+import "../index.css";
 
 export default function Login() {
+  const [countDown, setCountDown] = useState(5);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({
@@ -39,11 +40,29 @@ export default function Login() {
   }
 
   //Check if session exists
-  const user = localStorage.getItem('user'); 
-  if (user) return <Navigate to="/home" replace={true} />
+  const setTimer = (name: string) => {
+    if (countDown === 0) navigate("/home", { state: { name } });
+    setTimeout(() => {
+      setCountDown(countDown-1);
+    }, 1000)
+  }
 
+  const user = localStorage.getItem('user'); 
+  if (user) {
+    setTimer(user);
+    return (
+      <div className='pageLayout'>
+        <h4>Welcome to Fetch Dogs, {user}!</h4><br/>
+        <Link to={'/home'}>Search Dogs</Link><br/>
+        <p>You will be redirected in.....<b>{countDown}s</b></p>
+      </div>
+
+    )
+  }
+  
+  
   return (
-    <div>
+    <div className='pageLayout'>
       <h1>Fetch Dog</h1>
       <h3>Save and bring home a dog today!</h3>
         <form onSubmit={handleLogin}>
