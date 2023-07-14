@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate,  Navigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import "../index.css";
 
 export default function Login() {
@@ -40,7 +40,7 @@ export default function Login() {
   }
 
   //Check if session exists
-  const setTimer = (name: string) => {
+  const setTimer = (name: string): void => {
     if (countDown === 0) navigate("/home", { state: { name } });
     setTimeout(() => {
       setCountDown(countDown-1);
@@ -56,7 +56,6 @@ export default function Login() {
         <Link to={'/home'}>Search Dogs</Link><br/>
         <p>You will be redirected in.....<b>{countDown}s</b></p>
       </div>
-
     )
   }
   
