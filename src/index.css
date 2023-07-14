@@ -16,6 +16,11 @@ code {
   border: solid 1px;
 }
 
+.deleteButton:hover {
+  border: solid 2px red;
+  cursor: pointer;
+}
+
 .pageLayout {
   align-content: center;
   width: 100%;
@@ -45,6 +50,7 @@ code {
       background-color: transparent;
       cursor: default;
     }
+
     &:hover {
       background-color: rgba(0, 0, 0, 0.1);
       cursor: pointer;

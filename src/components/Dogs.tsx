@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import "../index.css";
-import { useLocation, useNavigate } from "react-router-dom";
 import SimplePagination from "./SimplePagination";
+
+interface Props {
+  breeds: string[];
+}
 
 interface Dog {
   id: string;
@@ -12,35 +15,41 @@ interface Dog {
   breed: string;
 }
 
-export default function Dogs() {
+export default function Dogs({ breeds }: Props) {
   const [dogObjs, setDogObjs] = useState([]);
   const [totalDogs, setTotalDogs] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchIndex, setSearchIndex] = useState(0);
-  
-  const navigate = useNavigate();
 
-  const { state } = useLocation();
-  // const { breeds, zipCodes, minAge, maxAge } = state;
-  
-  const displaySize = 7;
+  const displaySize = 10;
 
   useEffect(() => {
     getDogIds();
-  }, [searchIndex]);
+  }, [searchIndex, breeds]);
+
+  //custom search with array of breeds
+  let uri = 'https://frontend-take-home-service.fetch.com/dogs/search?';
+  breeds.forEach((breed: string) => {
+    let queryStr = 'breeds=' + encodeURIComponent(breed) + '&';
+    uri += queryStr;
+  })
+
+  const newURI = uri + `size=${displaySize}&from=${searchIndex}`;
+  console.log(newURI)
 
   const getDogIds = () => {
-    fetch(`https://frontend-take-home-service.fetch.com/dogs/search?size=${displaySize}&from=${searchIndex}`, {
+    fetch(newURI, {
       method: "GET",
       credentials: "include",
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
       .then((data) => {
-        setTotalDogs(data.total);    
+        setTotalDogs(data.total);
         getDogObjs(data.resultIds);
       });
   }
+
 
   const getDogObjs = (arr: Dog[]) => {
     fetch("https://frontend-take-home-service.fetch.com/dogs", {
@@ -53,20 +62,19 @@ export default function Dogs() {
       .then((data) => {
         setDogObjs(data);
       });
-  }
+  };
 
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    setSearchIndex((page - 1) * displaySize)
-  }
+    setCurrentPage(page);
+    setSearchIndex((page - 1) * displaySize);
+  };
 
-  const disableNext = (searchIndex + displaySize) >= totalDogs;
+  const disableNext = searchIndex + displaySize >= totalDogs;
 
   return (
     <div>
-      <button style={{ margin: '30px 0 30px 30px' }}onClick={() => navigate('/home')}>Back to Search</button>
-      <table style={{ marginLeft: '30px' }} id="dogTable">
+      <table style={{ marginLeft: "30px" }} id="dogTable">
         <thead>
           <tr>
             <th>PIC</th>
@@ -81,7 +89,10 @@ export default function Dogs() {
             return (
               <tr key={dogObj.id}>
                 <td>
-                  <img src={dogObj.img} style={{ width: "5rem", height: "5rem" }} />
+                  <img
+                    src={dogObj.img}
+                    style={{ width: "5rem", height: "5rem" }}
+                  />
                 </td>
                 <td>{dogObj.name}</td>
                 <td>{dogObj.age}</td>
@@ -92,8 +103,8 @@ export default function Dogs() {
           })}
         </tbody>
       </table>
-      <SimplePagination 
-        className="pagination-bar"  
+      <SimplePagination
+        className="pagination-bar"
         currentPage={currentPage}
         disableNext={disableNext}
         onPageChange={(page: number) => handlePageChange(page)}
