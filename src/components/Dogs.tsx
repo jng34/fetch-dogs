@@ -21,7 +21,7 @@ export default function Dogs({ breeds }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchIndex, setSearchIndex] = useState(0);
 
-  const displaySize = 10;
+  const displaySize = 6;
 
   useEffect(() => {
     getDogIds();
@@ -74,7 +74,7 @@ export default function Dogs({ breeds }: Props) {
 
   return (
     <div>
-      <table style={{ marginLeft: "30px" }} id="dogTable">
+      <table id="dogTable">
         <thead>
           <tr>
             <th>PIC</th>

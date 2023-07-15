@@ -1,8 +1,4 @@
-import React, {
-  ChangeEvent,
-  useEffect,
-  useState,
-} from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../index.css";
 import { Container, Row, Col } from "react-bootstrap";
@@ -70,11 +66,10 @@ export default function Home() {
   };
 
   const removeFilter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const selectedBreed = e.currentTarget.getAttribute('value');
+    const selectedBreed = e.currentTarget.getAttribute("value");
     const newBreeds = breeds.filter((breed: string) => breed !== selectedBreed);
     setBreeds(newBreeds);
   };
-
 
   const showBreedFilters = breeds.map((breed: string, idx: number) => {
     return (
@@ -94,15 +89,16 @@ export default function Home() {
   });
 
   return (
-    <Container className="pageLayout">
-      <header>
-        Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ""}!
-        <button style={{ marginLeft: "100px" }} onClick={handleLogOut}>
+    <div>
+      <header className="header">
+        <h2>Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ""}!
+        <button style={{ marginLeft: "200px" }} onClick={handleLogOut}>
           Log Out
         </button>
+        </h2>
       </header>
-      <Row>
-        <Col>
+      <div className="row">
+        <div className="leftCol">
           <h4>Search:</h4>
           <form onSubmit={handleSearchDogs}>
             <label>Breed:&nbsp;&nbsp;</label>
@@ -142,16 +138,14 @@ export default function Home() {
               maxLength={3}
             />
             <br />
-          </form>
-        </Col>
-        <Col>
-          <Row>
-            <p>Filters</p>
-            {showBreedFilters}
-          </Row>
+          </form><br/>
+          <p>Filters</p>
+          {showBreedFilters}
+        </div>
+        <div className="rightCol">
           <Dogs breeds={breeds} />
-        </Col>
-      </Row>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }

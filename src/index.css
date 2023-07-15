@@ -12,6 +12,27 @@ code {
     monospace;
 }
 
+.header {
+  margin: 20px 20px 40px 20px;
+  /* margin: 20px 20px 20px 20px; */
+}
+
+.row {
+  display: flex;
+}
+
+.leftCol {
+  width: 30%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.rightCol {
+  width: 70%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
 #dogTable {
   border: solid 1px;
 }
