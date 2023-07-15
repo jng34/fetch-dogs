@@ -1,18 +1,33 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
-export default function ErrorPage() {
+interface User {
+  name: string,
+  email: string
+}
+
+interface Props {
+  user: User
+}
+
+
+export default function ErrorPage({ user }: Props) {
   const [countDown, setCountDown] = useState(5);
   const navigate = useNavigate();
 
   const setTimer = (): void => {
-    if (countDown === 0) navigate("/home");
     setTimeout(() => {
       setCountDown(countDown-1);
     }, 1000)
   }
-
+  
   setTimer();
+  
+  if (countDown === 0) {
+    if (user.name) return <Navigate to="/home" replace={true} />;
+  } else {
+    return <Navigate to="/" replace={true} />;
+  }
 
   return (
     <div className='pageLayout'>

@@ -22,20 +22,35 @@ code {
 }
 
 .leftCol {
-  width: 30%;
+  width: 20%;
   margin-left: 5%;
   margin-right: 5%;
 }
 
 .rightCol {
-  width: 70%;
+  width: 80%;
   margin-left: 5%;
   margin-right: 5%;
 }
 
 #dogTable {
-  border: solid 1px;
+  border: 1px solid black;
+  table-layout: fixed;
+  width: 600px;
 }
+
+.dogTableRow {
+  border: 1px solid black;
+  width: 100px;
+  overflow: hidden;
+  text-align: center;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+}
+
 
 .deleteButton:hover {
   border: solid 2px red;

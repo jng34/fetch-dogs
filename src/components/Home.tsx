@@ -1,10 +1,19 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import "../index.css";
-import { Container, Row, Col } from "react-bootstrap";
 import Dogs from "./Dogs";
 
-export default function Home() {
+interface User {
+  name: string,
+  email: string
+}
+
+interface Props {
+  user: User
+  setUser: (user: User) => void
+}
+
+export default function Home({ user, setUser }: Props) {
   const [dogBreeds, setDogBreeds] = useState([]);
   const [breeds, setBreeds] = useState([]);
   const [zipCodes, setZipCodes] = useState([]);
@@ -12,40 +21,41 @@ export default function Home() {
   const [maxAge, setMaxAge] = useState(0);
 
   const navigate = useNavigate();
-  const { state } = useLocation();
-
+  
   useEffect(() => {
     getBreeds();
   }, []);
-
+  
+  if (!user.name) return <Navigate to="/" replace={true} />;
+  
   function getBreeds() {
     fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
       method: "GET",
       credentials: "include",
       headers: { "Content-type": "application/json" },
     })
-      .then((res) => res.json())
-      .then((data) => setDogBreeds(data));
+    .then((res) => res.json())
+    .then((data) => setDogBreeds(data));
   }
-
+  
   const handleLogOut = () => {
-    localStorage.removeItem("user");
-    navigate("/");
+    setUser({ name: '', email: '' })
+    return <Navigate to='/' replace />
   };
-
-  let i = 0;
-
+  
+  
+  
   const handleSelectBreed = (e: ChangeEvent<HTMLSelectElement>) => {
     let breedArr: any = [...breeds, e.target.value];
     console.log(breedArr);
     setBreeds(breedArr);
   };
-
+  
   const handleZipCode = (e: ChangeEvent<HTMLInputElement>) => {
     let zipArr: any = [...zipCodes, e.target.value];
     setZipCodes(zipArr);
   };
-
+  
   const handleMinAge = (e: ChangeEvent<HTMLInputElement>) => {
     setMinAge(Number(e.target.value));
   };
@@ -53,7 +63,7 @@ export default function Home() {
   const handleMaxAge = (e: ChangeEvent<HTMLInputElement>) => {
     setMaxAge(Number(e.target.value));
   };
-
+  
   const handleSearchDogs = () => {
     navigate("/dogs", {
       state: {
@@ -70,6 +80,7 @@ export default function Home() {
     const newBreeds = breeds.filter((breed: string) => breed !== selectedBreed);
     setBreeds(newBreeds);
   };
+  
 
   const showBreedFilters = breeds.map((breed: string, idx: number) => {
     return (
@@ -88,10 +99,14 @@ export default function Home() {
     );
   });
 
+  
+  let i = 0; // Index as keys for breed options
+  
   return (
     <div>
       <header className="header">
-        <h2>Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ""}!
+        <h2>Welcome to Fetch Dogs {user.name ? `, ${user.name}` : ""}!
+        {/* <h2>Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ""}! */}
         <button style={{ marginLeft: "200px" }} onClick={handleLogOut}>
           Log Out
         </button>

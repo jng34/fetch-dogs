@@ -1,9 +1,18 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
 import "../index.css";
 
-export default function Login() {
-  const [countDown, setCountDown] = useState(5);
+interface User {
+  name: string,
+  email: string
+}
+
+interface Props {
+  user: User, 
+  setUser: (user: User) => void
+}
+
+export default function Login({ user, setUser }: Props) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({
@@ -17,7 +26,6 @@ export default function Login() {
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // setErrors({...errors});
     if (!name) setErrors({ ...errors, name: 'Name is required' });
     if (!email) setErrors({ ...errors, email: 'Email is required' });
     if (!emailCheck.test(email)) setErrors({ ...errors, invalidEmail: 'Invalid email' });
@@ -31,35 +39,17 @@ export default function Login() {
         headers: { 'Content-type': 'application/json' }
       });
       if (auth.status === 200) {
-        localStorage.setItem('user', name)
-        navigate("/home", { state: { name } });
+        setUser({name, email})
+        navigate("/home");
       } 
     } catch (error) {
       navigate("/error")    
     }
   }
 
-  //Check if session exists
-  const setTimer = (name: string): void => {
-    if (countDown === 0) navigate("/home", { state: { name } });
-    setTimeout(() => {
-      setCountDown(countDown-1);
-    }, 1000)
-  }
+  //Check if user auth exists
+  if (user.name) navigate('/home');
 
-  const user = localStorage.getItem('user'); 
-  if (user) {
-    setTimer(user);
-    return (
-      <div className='pageLayout'>
-        <h4>Welcome to Fetch Dogs, {user}!</h4><br/>
-        <Link to={'/home'}>Search Dogs</Link><br/>
-        <p>You will be redirected in.....<b>{countDown}s</b></p>
-      </div>
-    )
-  }
-  
-  
   return (
     <div className='pageLayout'>
       <h1>Fetch Dog</h1>

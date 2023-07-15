@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../index.css";
 import SimplePagination from "./SimplePagination";
 
@@ -33,9 +33,7 @@ export default function Dogs({ breeds }: Props) {
     let queryStr = 'breeds=' + encodeURIComponent(breed) + '&';
     uri += queryStr;
   })
-
   const newURI = uri + `size=${displaySize}&from=${searchIndex}`;
-  console.log(newURI)
 
   const getDogIds = () => {
     fetch(newURI, {
@@ -64,6 +62,9 @@ export default function Dogs({ breeds }: Props) {
       });
   };
 
+  const displayDogCard = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
+
+  }
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -76,7 +77,7 @@ export default function Dogs({ breeds }: Props) {
     <div>
       <table id="dogTable">
         <thead>
-          <tr>
+          <tr className="dogTableRow">
             <th>PIC</th>
             <th>NAME</th>
             <th>AGE</th>
@@ -87,7 +88,7 @@ export default function Dogs({ breeds }: Props) {
         <tbody>
           {dogObjs.map((dogObj: Dog) => {
             return (
-              <tr key={dogObj.id}>
+              <tr key={dogObj.id} className="dogTableRow" onClick={displayDogCard}>
                 <td>
                   <img
                     src={dogObj.img}
