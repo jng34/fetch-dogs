@@ -1,19 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../index.css";
 import Dogs from "./Dogs";
 
-interface User {
-  name: string,
-  email: string
-}
 
-interface Props {
-  user: User
-  setUser: (user: User) => void
-}
-
-export default function Home({ user, setUser }: Props) {
+export default function Home() {
   const [dogBreeds, setDogBreeds] = useState([]);
   const [breeds, setBreeds] = useState([]);
   const [zipCodes, setZipCodes] = useState([]);
@@ -21,12 +12,13 @@ export default function Home({ user, setUser }: Props) {
   const [maxAge, setMaxAge] = useState(0);
 
   const navigate = useNavigate();
-  
+  // const { state }= useLocation();
+  // const { name } = state;
+
   useEffect(() => {
     getBreeds();
   }, []);
   
-  if (!user.name) return <Navigate to="/" replace={true} />;
   
   function getBreeds() {
     fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
@@ -34,13 +26,23 @@ export default function Home({ user, setUser }: Props) {
       credentials: "include",
       headers: { "Content-type": "application/json" },
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 401) navigate('/');
+      return res.json()
+    })
     .then((data) => setDogBreeds(data));
   }
   
   const handleLogOut = () => {
-    setUser({ name: '', email: '' })
-    return <Navigate to='/' replace />
+    fetch("https://frontend-take-home-service.fetch.com/auth/logout", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-type": "application/json" },
+    })
+    .then((res) => {
+      console.log(res)
+      navigate('/');
+    }) 
   };
   
   
@@ -105,7 +107,8 @@ export default function Home({ user, setUser }: Props) {
   return (
     <div>
       <header className="header">
-        <h2>Welcome to Fetch Dogs {user.name ? `, ${user.name}` : ""}!
+        <h2>Welcome to Fetch Dogs!
+        {/* <h2>Welcome to Fetch Dogs {name ? `, ${name}` : ""}! */}
         {/* <h2>Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ""}! */}
         <button style={{ marginLeft: "200px" }} onClick={handleLogOut}>
           Log Out

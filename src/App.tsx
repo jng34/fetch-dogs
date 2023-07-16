@@ -32,15 +32,13 @@ const AuthRoutes = () => {
 };
 
 export default function App() {
-  const [user, setUser] = useState({ name: "", email: "" });
-
   return (
     <Routes>
-      <Route path="/" element={<Login user={user} setUser={setUser} />} />
-      <Route path="/" element={<AuthRoutes />}>
-        <Route path="/home" element={<Home user={user} setUser={setUser} />} />
-      </Route>
-      <Route path="*" element={<ErrorPage user={user} />} />
+      <Route path="/" element={<Login />} />
+      {/* <Route path="/" element={<AuthRoutes />}> */}
+        <Route path="/home" element={<Home />} />
+      {/* </Route> */}
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 }
