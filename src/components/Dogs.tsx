@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "../index.css";
 import SimplePagination from "./SimplePagination";
+import { querySearch } from "./querySearch";
 
 interface Props {
-  breeds: string[];
+  breeds: string[],
+  zipCodes: string[],
+  minAge: number,
+  maxAge: number,
 }
 
 interface Dog {
@@ -15,7 +19,7 @@ interface Dog {
   breed: string;
 }
 
-export default function Dogs({ breeds }: Props) {
+export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
   const [dogObjs, setDogObjs] = useState([]);
   const [totalDogs, setTotalDogs] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,15 +29,10 @@ export default function Dogs({ breeds }: Props) {
 
   useEffect(() => {
     getDogIds();
-  }, [searchIndex, breeds]);
+  }, [searchIndex, breeds, zipCodes, minAge, maxAge]);
 
-  //custom search with array of breeds
-  let uri = 'https://frontend-take-home-service.fetch.com/dogs/search?';
-  breeds.forEach((breed: string) => {
-    let queryStr = 'breeds=' + encodeURIComponent(breed) + '&';
-    uri += queryStr;
-  })
-  const newURI = uri + `size=${displaySize}&from=${searchIndex}`;
+  //custom URI query search with filters
+  const newURI = querySearch(breeds, zipCodes, minAge, maxAge, displaySize, searchIndex);
 
   const getDogIds = () => {
     fetch(newURI, {
@@ -75,6 +74,7 @@ export default function Dogs({ breeds }: Props) {
 
   return (
     <div>
+      <h4>Total: {totalDogs}</h4>
       <table id="dogTable">
         <thead>
           <tr className="dogTableRow">

@@ -1,13 +1,14 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../index.css";
 import Dogs from "./Dogs";
-
 
 export default function Home() {
   const [dogBreeds, setDogBreeds] = useState([]);
   const [breeds, setBreeds] = useState([]);
+  const [zip, setZip] = useState('');
   const [zipCodes, setZipCodes] = useState([]);
+  const [zipError, setZipError] = useState(false);
   const [minAge, setMinAge] = useState(0);
   const [maxAge, setMaxAge] = useState(0);
 
@@ -18,46 +19,54 @@ export default function Home() {
   useEffect(() => {
     getBreeds();
   }, []);
-  
-  
+
   function getBreeds() {
     fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
       method: "GET",
       credentials: "include",
       headers: { "Content-type": "application/json" },
     })
-    .then((res) => {
-      if (res.status === 401) navigate('/');
-      return res.json()
-    })
-    .then((data) => setDogBreeds(data));
+      .then((res) => {
+        if (res.status === 401) navigate("/");
+        return res.json();
+      })
+      .then((data) => setDogBreeds(data));
   }
-  
+
   const handleLogOut = () => {
     fetch("https://frontend-take-home-service.fetch.com/auth/logout", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
-    })
-    .then((res) => {
-      console.log(res)
-      navigate('/');
-    }) 
+    }).then((res) => {
+      console.log(res);
+      navigate("/");
+    });
   };
-  
-  
-  
+
   const handleSelectBreed = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === 'All') {
+      setBreeds([]);
+      return;
+    }
     let breedArr: any = [...breeds, e.target.value];
     console.log(breedArr);
     setBreeds(breedArr);
   };
-  
-  const handleZipCode = (e: ChangeEvent<HTMLInputElement>) => {
-    let zipArr: any = [...zipCodes, e.target.value];
-    setZipCodes(zipArr);
+
+  const onZipChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setZip(e.target.value);
   };
-  
+
+  const handleZipCode = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const input: string | null = e.currentTarget.getAttribute("value");
+    console.log(input);
+    if (input && input.length > 5 || Number(input) < 1 || Number(input) > 99950) return setZipError(true);
+    const zipArr: any = [...zipCodes, input];
+    setZipCodes(zipArr);
+    setZipError(false);
+  };
+
   const handleMinAge = (e: ChangeEvent<HTMLInputElement>) => {
     setMinAge(Number(e.target.value));
   };
@@ -65,24 +74,32 @@ export default function Home() {
   const handleMaxAge = (e: ChangeEvent<HTMLInputElement>) => {
     setMaxAge(Number(e.target.value));
   };
-  
-  const handleSearchDogs = () => {
-    navigate("/dogs", {
-      state: {
-        breeds,
-        zipCodes,
-        minAge,
-        maxAge,
-      },
-    });
+
+  const onReset = (e: FormEvent<HTMLFormElement>) => {
+    // e.preventDefault();
+    setBreeds([]);
+    setZip('');
+    setZipCodes([]);
+    setZipError(false);
+    setMinAge(0);
+    setMaxAge(0);
+  }
+
+
+  const removeBreedFilter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const selectedBreed = e.currentTarget.getAttribute("value");
+    if (selectedBreed === 'All') return setBreeds([]);
+    const filteredBreeds = breeds.filter((breed: string) => breed !== selectedBreed);
+    setBreeds(filteredBreeds);
   };
 
-  const removeFilter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const selectedBreed = e.currentTarget.getAttribute("value");
-    const newBreeds = breeds.filter((breed: string) => breed !== selectedBreed);
-    setBreeds(newBreeds);
+  const removeZipFilter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    let selectedZip: string | null = e.currentTarget.getAttribute("value");
+    const filteredZips = zipCodes.filter((zip: string) => {
+      if (selectedZip) return parseInt(zip) !== parseInt(selectedZip)
+    });
+    setZipCodes(filteredZips);
   };
-  
 
   const showBreedFilters = breeds.map((breed: string, idx: number) => {
     return (
@@ -91,7 +108,7 @@ export default function Home() {
           type="button"
           className="deleteButton"
           value={breed}
-          onClick={(e) => removeFilter(e)}
+          onClick={(e) => removeBreedFilter(e)}
         >
           X
         </button>
@@ -101,27 +118,46 @@ export default function Home() {
     );
   });
 
-  
+  const showZipFilters = zipCodes.map((zip: string, idx: number) => {
+    let zipStr = zip;
+    if (Number(zip) < 10000) zipStr = zip.padStart(5, '0');
+    return (
+      <div key={idx}>
+        <button
+          type="button"
+          className="deleteButton"
+          value={zipStr}
+          onClick={(e) => removeZipFilter(e)}
+        >
+          X
+        </button>
+        &nbsp;
+        <span>{zipStr}</span>
+      </div>
+    );
+  });
+
   let i = 0; // Index as keys for breed options
-  
+
   return (
     <div>
       <header className="header">
-        <h2>Welcome to Fetch Dogs!
-        {/* <h2>Welcome to Fetch Dogs {name ? `, ${name}` : ""}! */}
-        {/* <h2>Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ""}! */}
-        <button style={{ marginLeft: "200px" }} onClick={handleLogOut}>
-          Log Out
-        </button>
+        <h2>
+          Welcome to Fetch Dogs!
+          {/* <h2>Welcome to Fetch Dogs {name ? `, ${name}` : ""}! */}
+          {/* <h2>Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ""}! */}
+          <button style={{ marginLeft: "200px" }} onClick={handleLogOut}>
+            Log Out
+          </button>
         </h2>
       </header>
       <div className="row">
         <div className="leftCol">
           <h4>Search:</h4>
-          <form onSubmit={handleSearchDogs}>
+          <form onSubmit={onReset}>
             <label>Breed:&nbsp;&nbsp;</label>
             <select name={"breeds"} onChange={handleSelectBreed}>
-              <option value="">All</option>
+              <option value="All">All</option>
               {dogBreeds.map((breed) => (
                 <option key={i++} value={breed}>
                   {breed}
@@ -133,35 +169,56 @@ export default function Home() {
             <input
               type="number"
               name="zipcode"
-              placeholder="...e.g. 10028"
-              onChange={handleZipCode}
-              maxLength={5}
+              placeholder="zip"
+              value={zip}
+              onChange={onZipChange}
             />
+            <button type="button" value={zip} onClick={handleZipCode}>
+              Set
+            </button>
             <br />
+            {zipError ? (
+              <>
+                <span style={{ color: "red" }}>
+                  Please enter a valid zip code
+                </span>
+                <br />
+              </>
+            ) : (
+              <></>
+            )}
             <label>Min age:&nbsp;&nbsp;</label>
             <input
               type="number"
               name="minAge"
+              placeholder="min"
               onChange={handleMinAge}
               min={0}
-              maxLength={2}
-            />
+            />  
             <br />
             <label>Max age:&nbsp;&nbsp;</label>
             <input
               type="number"
               name="maxAge"
+              placeholder="max"
               onChange={handleMaxAge}
               max={100}
-              maxLength={3}
             />
             <br />
-          </form><br/>
+            <button type="submit">RESET</button>
+          </form>
+          <br />
           <p>Filters</p>
           {showBreedFilters}
+          {showZipFilters}
         </div>
         <div className="rightCol">
-          <Dogs breeds={breeds} />
+          <Dogs 
+            breeds={breeds} 
+            zipCodes={zipCodes}
+            minAge={minAge}
+            maxAge={maxAge}
+          />
         </div>
       </div>
     </div>
