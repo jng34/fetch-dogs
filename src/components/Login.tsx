@@ -66,7 +66,7 @@ export default function Login() {
 
   return (
     <div className='pageLayout'>
-      <h1>Fetch Dog</h1>
+      <h1>Fetch Dogs Adoption</h1>
       <h3>Save and bring home a dog today!</h3>
         <form onSubmit={handleLogin}>
           <label>Name</label><br/>

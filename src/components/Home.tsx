@@ -144,7 +144,7 @@ export default function Home() {
     <div>
       <header className="header">
         <h2 style={{ display: 'inline' }}>
-          Welcome to Fetch Dogs!
+          Welcome to Fetch Dogs Adoption!
           {/* <h2>Welcome to Fetch Dogs {name ? `, ${name}` : ""}! */}
           {/* <h2>Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ""}! */}
         </h2>

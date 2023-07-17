@@ -1,4 +1,4 @@
-# Fetch Dogs
+# Fetch Dogs Adoption
 
 This project allows you to search through a database of shelter dogs and find them new homes!
 
