@@ -75,6 +75,7 @@ export default function Home() {
     setMaxAge(Number(e.target.value));
   };
 
+
   const onReset = (e: FormEvent<HTMLFormElement>) => {
     // e.preventDefault();
     setBreeds([]);
@@ -142,14 +143,14 @@ export default function Home() {
   return (
     <div>
       <header className="header">
-        <h2>
+        <h2 style={{ display: 'inline' }}>
           Welcome to Fetch Dogs!
           {/* <h2>Welcome to Fetch Dogs {name ? `, ${name}` : ""}! */}
           {/* <h2>Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ""}! */}
-          <button style={{ marginLeft: "200px" }} onClick={handleLogOut}>
-            Log Out
-          </button>
         </h2>
+        <button id="logout" style={{ marginInline: '300px'}} onClick={handleLogOut}>
+          Log Out
+        </button>
       </header>
       <div className="row">
         <div className="leftCol">
@@ -173,7 +174,7 @@ export default function Home() {
               value={zip}
               onChange={onZipChange}
             />
-            <button type="button" value={zip} onClick={handleZipCode}>
+            <button style={{ cursor: "pointer" }} type="button" value={zip} onClick={handleZipCode}>
               Set
             </button>
             <br />
@@ -194,7 +195,7 @@ export default function Home() {
               placeholder="min"
               onChange={handleMinAge}
               min={0}
-            />  
+            />
             <br />
             <label>Max age:&nbsp;&nbsp;</label>
             <input
@@ -204,8 +205,8 @@ export default function Home() {
               onChange={handleMaxAge}
               max={100}
             />
-            <br />
-            <button type="submit">RESET</button>
+            <br /><br />
+            <button id="reset" type="submit">RESET</button>
           </form>
           <br />
           <p>Filters</p>

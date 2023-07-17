@@ -1,8 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -12,9 +10,33 @@ code {
     monospace;
 }
 
+select {
+  width: fit-content;
+  padding: 6px 10px;
+  margin: 4px 0;
+  box-sizing: border-box;
+}
+
+select:focus {
+  border: 2px solid #555;
+}
+
+input {
+  width: fit-content;
+  padding: 6px 10px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+input:focus {
+  border: 2px solid #555;
+}
+
 .header {
-  margin: 20px 20px 40px 20px;
-  /* margin: 20px 20px 20px 20px; */
+  width: 100%;
+  margin: 50px 100px;
+  text-align: start;
+  display: inline-block;
 }
 
 .row {
@@ -27,10 +49,19 @@ code {
   margin-right: 5%;
 }
 
+#logout {
+  width: auto;
+  height: 30px;
+  margin: auto;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight: bold;
+  background-color: lightgrey;
+  border-radius: 5%;
+  cursor: pointer;
+}
+
 .rightCol {
   width: 70%;
-  margin-left: 5%;
-  margin-right: 5%;
 }
 
 #dogTable {
@@ -51,11 +82,11 @@ code {
   }
 }
 
-
 .deleteButton:hover {
   border: solid 2px red;
   cursor: pointer;
 }
+
 
 .pageLayout {
   align-content: center;
@@ -79,7 +110,7 @@ code {
     letter-spacing: 0.01071em;
     border-radius: 16px;
     line-height: 1.43;
-    font-size: 13px;
+    font-size: 16px;
     min-width: 32px;
 
     &.dots:hover {
@@ -132,4 +163,25 @@ code {
       }
     }
   }
+}
+
+#reset {
+  width: auto;
+  height: 30px;
+  margin: auto;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight: bold;
+  background-color: lightcoral;
+  border-radius: 5%;
+  cursor: pointer;
+}
+
+#match {
+  width: auto;
+  height: 30px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight: bold;
+  background-color: skyblue;
+  border-radius: 5%;
+  cursor: pointer;
 }

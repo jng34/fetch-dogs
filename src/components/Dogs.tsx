@@ -19,13 +19,15 @@ interface Dog {
   breed: string;
 }
 
+
 export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
+  const [dogMatch, setDogMatch] = useState('');
   const [dogObjs, setDogObjs] = useState([]);
   const [totalDogs, setTotalDogs] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchIndex, setSearchIndex] = useState(0);
 
-  const displaySize = 6;
+  const displaySize = 50;
 
   useEffect(() => {
     getDogIds();
@@ -44,11 +46,12 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
       .then((data) => {
         setTotalDogs(data.total);
         getDogObjs(data.resultIds);
+        getDogMatch(data.resultIds);
       });
   }
 
 
-  const getDogObjs = (arr: Dog[]) => {
+  const getDogObjs = (arr: string[]) => {
     fetch("https://frontend-take-home-service.fetch.com/dogs", {
       method: "POST",
       credentials: "include",
@@ -56,13 +59,30 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
-      .then((data) => {
-        setDogObjs(data);
-      });
+      .then((data) => setDogObjs(data))
   };
 
-  const displayDogCard = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
 
+  const getDogMatch = (arr: string[]) => {
+    fetch("https://frontend-take-home-service.fetch.com/dogs/match", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(arr),
+      headers: { "Content-type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setDogMatch(data.match)
+      })
+  };
+
+  const handleDogMatch = () => {
+    getDogObjs([dogMatch]);
+  }
+
+  const displayDogCard = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
+    console.log(e)
   }
 
   const handlePageChange = (page: number) => {
@@ -74,7 +94,10 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
 
   return (
     <div>
-      <h4>Total: {totalDogs}</h4>
+      <div style={{ margin: '20px'}}>
+        <h4 style={{ display: 'inline', marginRight: '200px' }}>Total: {totalDogs}</h4>
+        Choose a dog or <button id="match" type="button" onClick={handleDogMatch}>MATCH ME</button>
+      </div>
       <table id="dogTable">
         <thead>
           <tr className="dogTableRow">
@@ -88,7 +111,7 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
         <tbody>
           {dogObjs.map((dogObj: Dog) => {
             return (
-              <tr key={dogObj.id} className="dogTableRow" onClick={displayDogCard}>
+              <tr key={dogObj.id} className="dogTableRow" onClick={(e) => displayDogCard(e)}>
                 <td>
                   <img
                     src={dogObj.img}
