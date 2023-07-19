@@ -1,7 +1,9 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, createContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import Dogs from "./Dogs";
+import { querySearch } from "./querySearch";
+
 
 export default function Home() {
   const [dogBreeds, setDogBreeds] = useState([]);
@@ -11,13 +13,18 @@ export default function Home() {
   const [zipError, setZipError] = useState(false);
   const [minAge, setMinAge] = useState(0);
   const [maxAge, setMaxAge] = useState(0);
-
+  const [newURI, setNewURI] = useState(
+    'https://frontend-take-home-service.fetch.com/dogs/search?size=100'
+  );
+  
   const navigate = useNavigate();
-
+  // console.log(newURI)
+  
   useEffect(() => {
     getBreeds();
+    setNewURI(querySearch(breeds, zipCodes, minAge, maxAge));
   }, []);
-
+  
   function getBreeds() {
     fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
       method: "GET",
@@ -64,6 +71,7 @@ export default function Home() {
 
 
   const onReset = (e: FormEvent<HTMLFormElement>) => {
+    //refactor to setNewURI to default endpoint
     setBreeds([]);
     setZip('');
     setZipCodes([]);
@@ -203,6 +211,8 @@ export default function Home() {
             zipCodes={zipCodes}
             minAge={minAge}
             maxAge={maxAge}
+            newURI={newURI}
+            setNewURI={setNewURI}
           />
         </div>
       </div>

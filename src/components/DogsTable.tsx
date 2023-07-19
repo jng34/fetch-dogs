@@ -1,32 +1,40 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 interface Dog {
-  id: string,
-  img: string,
-  name: string,
-  age: number,
-  zip_code: string,
-  breed: string,
+  id: string;
+  img: string;
+  name: string;
+  age: number;
+  zip_code: string;
+  breed: string;
 }
 
 interface Props {
-  dogObjs: Dog[],
-  currentPage: number,
-  displaySize: number,
-  toggleMatch: boolean,
-  // currentDogs: any,
-  setToggleMatch: (arg: boolean) => void,
+  dogObjs: Dog[];
+  currentPage: number;
+  displaySize: number;
+  toggleMatch: boolean;
+  setToggleMatch: (arg: boolean) => void;
 }
 
-export default function DogsTable({ dogObjs, currentPage, displaySize, toggleMatch, setToggleMatch }: Props) {
+export default function DogsTable({
+  dogObjs,
+  currentPage,
+  displaySize,
+  toggleMatch,
+  setToggleMatch,
+}: Props) {
   
   const currentDogs = useMemo(() => {
     // if (toggleMatch) return dogObjs;
-    const firstPageIndex = (currentPage - 1) * displaySize;
-    const lastPageIndex = firstPageIndex + displaySize;
+    const firstPageIndex = ((currentPage - 1) * displaySize) % 100;
+    const lastPageIndex = 
+      (firstPageIndex + displaySize) % 100 
+      ? (firstPageIndex + displaySize) % 100 
+      : (firstPageIndex + displaySize);
     return dogObjs.slice(firstPageIndex, lastPageIndex);
   }, [dogObjs, currentPage, toggleMatch]);
-  
+
   return (
     <div>
       <table id="dogTable">
@@ -42,7 +50,11 @@ export default function DogsTable({ dogObjs, currentPage, displaySize, toggleMat
         <tbody>
           {currentDogs.map((dogObj: Dog) => {
             return (
-              <tr key={dogObj.id} className="dogTableRow" onClick={(e) => console.log(e)}>
+              <tr
+                key={dogObj.id}
+                className="dogTableRow"
+                onClick={(e) => console.log(e)}
+              >
                 <td>
                   <img
                     src={dogObj.img}
@@ -57,7 +69,7 @@ export default function DogsTable({ dogObjs, currentPage, displaySize, toggleMat
             );
           })}
         </tbody>
-      </table>  
+      </table>
     </div>
-  )
+  );
 }
