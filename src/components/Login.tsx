@@ -34,7 +34,6 @@ export default function Login() {
           headers: { "Content-type": "application/json" },
         }
       );
-      console.log(data.status)
       if (data.status === 200) navigate('/home');
     };
     checkForAuth().catch(console.error);
@@ -57,7 +56,7 @@ export default function Login() {
       });
       if (auth.status === 200) navigate("/home", { state: { name }}); 
     } catch (error) {
-      navigate("/error")    
+      navigate("/error");  
     }
   }
 

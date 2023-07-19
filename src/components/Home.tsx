@@ -13,8 +13,6 @@ export default function Home() {
   const [maxAge, setMaxAge] = useState(0);
 
   const navigate = useNavigate();
-  // const { state }= useLocation();
-  // const { name } = state;
 
   useEffect(() => {
     getBreeds();
@@ -38,29 +36,18 @@ export default function Home() {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
-    }).then((res) => {
-      console.log(res);
-      navigate("/");
-    });
+    })
+      .then(() => navigate("/"));
   };
 
   const handleSelectBreed = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === 'All') {
-      setBreeds([]);
-      return;
-    }
+    if (e.target.value === 'All') return setBreeds([]);
     let breedArr: any = [...breeds, e.target.value];
-    console.log(breedArr);
     setBreeds(breedArr);
-  };
-
-  const onZipChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setZip(e.target.value);
   };
 
   const handleZipCode = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const input: string | null = e.currentTarget.getAttribute("value");
-    console.log(input);
     if (input && input.length > 5 || Number(input) < 1 || Number(input) > 99950) return setZipError(true);
     const zipArr: any = [...zipCodes, input];
     setZipCodes(zipArr);
@@ -77,7 +64,6 @@ export default function Home() {
 
 
   const onReset = (e: FormEvent<HTMLFormElement>) => {
-    // e.preventDefault();
     setBreeds([]);
     setZip('');
     setZipCodes([]);
@@ -97,7 +83,7 @@ export default function Home() {
   const removeZipFilter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     let selectedZip: string | null = e.currentTarget.getAttribute("value");
     const filteredZips = zipCodes.filter((zip: string) => {
-      if (selectedZip) return parseInt(zip) !== parseInt(selectedZip)
+      if (selectedZip) return parseInt(zip) !== parseInt(selectedZip);
     });
     setZipCodes(filteredZips);
   };
@@ -145,8 +131,6 @@ export default function Home() {
       <header className="header">
         <h2 style={{ display: 'inline' }}>
           Welcome to Fetch Dogs Adoption!
-          {/* <h2>Welcome to Fetch Dogs {name ? `, ${name}` : ""}! */}
-          {/* <h2>Welcome to Fetch Dogs {state && state.name ? `, ${state.name}` : ""}! */}
         </h2>
         <button id="logout" style={{ marginInline: '300px'}} onClick={handleLogOut}>
           Log Out
@@ -172,7 +156,7 @@ export default function Home() {
               name="zipcode"
               placeholder="zip"
               value={zip}
-              onChange={onZipChange}
+              onChange={(e) => setZip(e.target.value)}
             />
             <button style={{ cursor: "pointer" }} type="button" value={zip} onClick={handleZipCode}>
               Set

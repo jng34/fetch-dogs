@@ -3,8 +3,8 @@ export const querySearch = (
   zipCodes: string[],
   minAge: number,
   maxAge: number,
-  displaySize: number,
-  searchIndex: number,
+  // displaySize: number,
+  // searchIndex: number,
 ) => {
   let uri = 'https://frontend-take-home-service.fetch.com/dogs/search?';
   breeds.forEach((breed: string) => {
@@ -17,6 +17,7 @@ export const querySearch = (
   })
   if (minAge) uri += `ageMin=${minAge}&`;
   if (maxAge) uri += `ageMax=${maxAge}&`;
-  const newURI = uri + `size=${displaySize}&from=${searchIndex}`;
+  const newURI = uri + `size=100`;
+  // const newURI = uri + `size=${displaySize}&from=${searchIndex}`;
   return newURI;
 };

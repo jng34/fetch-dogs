@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "../index.css";
 import SimplePagination from "./SimplePagination";
 import { querySearch } from "./querySearch";
+import Pagination from "./Pagination";
+import DogsTable from "./DogsTable";
 
 interface Props {
   breeds: string[],
@@ -21,22 +23,26 @@ interface Dog {
 
 
 export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
-  const [dogMatch, setDogMatch] = useState('');
+  const [toggleMatch, setToggleMatch] = useState(false);
+  const [dogMatch, setDogMatch] = useState(''); //simplePagination
   const [dogObjs, setDogObjs] = useState([]);
   const [totalDogs, setTotalDogs] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchIndex, setSearchIndex] = useState(0);
+  const [nextDogs, setNextDogs] = useState('');
+  // const [searchIndex, setSearchIndex] = useState(0);
 
-  const displaySize = 50;
+  const displaySize = 10;
 
   useEffect(() => {
     getDogIds();
-  }, [searchIndex, breeds, zipCodes, minAge, maxAge]);
+  }, [breeds, zipCodes, minAge, maxAge, toggleMatch]);
 
   //custom URI query search with filters
-  const newURI = querySearch(breeds, zipCodes, minAge, maxAge, displaySize, searchIndex);
+  const newURI = querySearch(breeds, zipCodes, minAge, maxAge);
+  console.log(newURI)
+  // const newURI = querySearch(breeds, zipCodes, minAge, maxAge, displaySize, searchIndex);
 
-  const getDogIds = () => {
+  function getDogIds() {
     fetch(newURI, {
       method: "GET",
       credentials: "include",
@@ -44,14 +50,15 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
     })
       .then((res) => res.json())
       .then((data) => {
+        setNextDogs(data.next);
         setTotalDogs(data.total);
         getDogObjs(data.resultIds);
         getDogMatch(data.resultIds);
       });
   }
+  console.log(nextDogs)
 
-
-  const getDogObjs = (arr: string[]) => {
+  function getDogObjs(arr: string[]) {
     fetch("https://frontend-take-home-service.fetch.com/dogs", {
       method: "POST",
       credentials: "include",
@@ -59,11 +66,14 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
-      .then((data) => setDogObjs(data))
+      .then((data) => {
+        // console.log(data);
+        setDogObjs(data);
+      })
   };
 
 
-  const getDogMatch = (arr: string[]) => {
+  function getDogMatch(arr: string[]) {
     fetch("https://frontend-take-home-service.fetch.com/dogs/match", {
       method: "POST",
       credentials: "include",
@@ -71,68 +81,60 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        setDogMatch(data.match)
-      })
+      .then((data) => setDogMatch(data.match))
   };
 
   const handleDogMatch = () => {
+    setToggleMatch(true);
     getDogObjs([dogMatch]);
+
   }
 
+  // Need to configure
   const displayDogCard = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
     console.log(e)
+    return
   }
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    setSearchIndex((page - 1) * displaySize);
-  };
-
-  const disableNext = searchIndex + displaySize >= totalDogs;
-
+  // const handlePageChange = (page: number) => {
+  //   setCurrentPage(page);
+  //   setSearchIndex((page - 1) * displaySize);
+  // };
+  // const disableNext = searchIndex + displaySize >= totalDogs; //simplePagination
+  
   return (
     <div>
       <div style={{ margin: '20px'}}>
         <h4 style={{ display: 'inline', marginRight: '200px' }}>Total: {totalDogs}</h4>
         Choose a dog or <button id="match" type="button" onClick={handleDogMatch}>MATCH ME</button>
       </div>
-      <table id="dogTable">
-        <thead>
-          <tr className="dogTableRow">
-            <th>PIC</th>
-            <th>NAME</th>
-            <th>AGE</th>
-            <th>BREED</th>
-            <th>ZIP CODE</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dogObjs.map((dogObj: Dog) => {
-            return (
-              <tr key={dogObj.id} className="dogTableRow" onClick={(e) => displayDogCard(e)}>
-                <td>
-                  <img
-                    src={dogObj.img}
-                    style={{ width: "5rem", height: "5rem" }}
-                  />
-                </td>
-                <td>{dogObj.name}</td>
-                <td>{dogObj.age}</td>
-                <td>{dogObj.breed}</td>
-                <td>{dogObj.zip_code}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <SimplePagination
+      <Pagination
+        className="pagination-bar"
+        totalCount={totalDogs}
+        currentPage={currentPage}
+        pageSize={displaySize}
+        onPageChange={(page: number) => setCurrentPage(page)}
+      />
+      <DogsTable 
+        dogObjs={dogObjs}
+        currentPage={currentPage}
+        displaySize={displaySize}
+        toggleMatch={toggleMatch}
+        setToggleMatch={setToggleMatch}
+      />
+      <Pagination
+        className="pagination-bar"
+        totalCount={totalDogs}
+        currentPage={currentPage}
+        pageSize={displaySize}
+        onPageChange={(page: number) => setCurrentPage(page)}
+      />
+      {/* <SimplePagination
         className="pagination-bar"
         currentPage={currentPage}
         disableNext={disableNext}
         onPageChange={(page: number) => handlePageChange(page)}
-      />
+      /> */}
     </div>
   );
 }
