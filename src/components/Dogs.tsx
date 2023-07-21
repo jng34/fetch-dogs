@@ -9,11 +9,11 @@ interface Props {
   zipCodes: string[],
   minAge: number,
   maxAge: number,
-  // newURI: string,
-  // setNewURI: (arg: any) => void,
+  newURI: string,
+  setNewURI: (arg: any) => void,
 }
 
-export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
+export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewURI }: Props) {
   const [toggleMatch, setToggleMatch] = useState(false);
   const [dogMatch, setDogMatch] = useState(''); //simplePagination
   const [dogObjs, setDogObjs] = useState([]);
@@ -21,42 +21,12 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [prevDogsURI, setPrevDogsURI] = useState('');
   const [nextDogsURI, setNextDogsURI] = useState('');
-  
-  const [uri, setURI] = useState(querySearch(breeds, zipCodes, minAge, maxAge));
-  
   const displaySize = 10;
 
-  // const uri = useMemo(() => {
-  //   const searchIndex = ((currentPage - 1) * displaySize);
-  //   console.log(searchIndex)
-  //   // let uri = 'https://frontend-take-home-service.fetch.com';
-  //   if (nextDogsURI && searchIndex >= 100 && searchIndex % 100 === 0) {
-  //     return querySearch(breeds, zipCodes, minAge, maxAge, nextDogsURI);
-  //   }
-  //   if (prevDogsURI && searchIndex < 100 && searchIndex % 100 === 0) {
-  //     return querySearch(breeds, zipCodes, minAge, maxAge, prevDogsURI);
-  //   }
-
-  //   // if (toggleNext) {
-  //   //   // console.log('next')
-  //   //   return querySearch(breeds, zipCodes, minAge, maxAge, nextDogsURI);
-  //   // }
-  //   // if (togglePrev) {
-  //   //   // console.log('prev')
-  //   //   return querySearch(breeds, zipCodes, minAge, maxAge, prevDogsURI);
-  //   // }
-  //   // console.log('useMemo')
-  //   return querySearch(breeds, zipCodes, minAge, maxAge);
-  // }, [breeds, zipCodes, minAge, maxAge, toggleNext, togglePrev]);
-  
-  // console.log(uri)
-  
   useEffect(() => {
-    console.log(uri)
-    getDogIds(uri);
-  }, [uri, currentPage, toggleMatch]);
+    getDogIds(newURI);
+  }, [newURI, currentPage, toggleMatch]);
 
-  // console.log(nextDogsURI)
 
   function getDogIds(uri: string) {
     fetch(uri, {
@@ -83,7 +53,6 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data);
         setDogObjs(data);
       })
   };
@@ -112,15 +81,14 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge }: Props) {
   }
 
   const handlePageChange = (page: number) => {
-    
     setCurrentPage(page);
-    if (page === 1) return setURI(querySearch(breeds, zipCodes, minAge, maxAge));
+    if (page === 1) return setNewURI(querySearch(breeds, zipCodes, minAge, maxAge));
     const searchIndex = ((page - 1) * displaySize);
     if (searchIndex >= 100 && searchIndex % 100 === 0) {
-      return setURI(querySearch(breeds, zipCodes, minAge, maxAge, nextDogsURI));
+      return setNewURI(querySearch(breeds, zipCodes, minAge, maxAge, nextDogsURI));
     }
     if (searchIndex < 100 && searchIndex % 100 === 0) {
-      return setURI(querySearch(breeds, zipCodes, minAge, maxAge, prevDogsURI));
+      return setNewURI(querySearch(breeds, zipCodes, minAge, maxAge, '', prevDogsURI));
     }
   };
 

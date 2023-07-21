@@ -1,29 +1,28 @@
-import React, { ChangeEvent, FormEvent, createContext, useEffect, useMemo, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import Dogs from "./Dogs";
 import { querySearch } from "./querySearch";
 
-
 export default function Home() {
   const [dogBreeds, setDogBreeds] = useState([]);
   const [breeds, setBreeds] = useState([]);
-  const [zip, setZip] = useState('');
+  const [zip, setZip] = useState("");
   const [zipCodes, setZipCodes] = useState([]);
   const [zipError, setZipError] = useState(false);
   const [minAge, setMinAge] = useState(0);
   const [maxAge, setMaxAge] = useState(0);
-  // const [newURI, setNewURI] = useState(
-  //   'https://frontend-take-home-service.fetch.com/dogs/search?size=100'
-  // );
-  
+  const [newURI, setNewURI] = useState(
+    querySearch(breeds, zipCodes, minAge, maxAge)
+  );
+
   const navigate = useNavigate();
-  // console.log(newURI)
-  
+
   useEffect(() => {
     getBreeds();
-  }, []);
-  
+    setNewURI(querySearch(breeds, zipCodes, minAge, maxAge));
+  }, [breeds, zipCodes, minAge, maxAge]);
+
   function getBreeds() {
     fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
       method: "GET",
@@ -42,19 +41,25 @@ export default function Home() {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
-    })
-      .then(() => navigate("/"));
+    }).then(() => navigate("/"));
   };
 
   const handleSelectBreed = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === 'All') return setBreeds([]);
+    if (e.target.value === "All") return setBreeds([]);
     let breedArr: any = [...breeds, e.target.value];
     setBreeds(breedArr);
   };
 
-  const handleZipCode = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleZipCode = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     const input: string | null = e.currentTarget.getAttribute("value");
-    if (input && input.length > 5 || Number(input) < 1 || Number(input) > 99950) return setZipError(true);
+    if (
+      (input && input.length > 5) ||
+      Number(input) < 1 ||
+      Number(input) > 99950
+    )
+      return setZipError(true);
     const zipArr: any = [...zipCodes, input];
     setZipCodes(zipArr);
     setZipError(false);
@@ -68,26 +73,30 @@ export default function Home() {
     setMaxAge(Number(e.target.value));
   };
 
-
   const onReset = (e: FormEvent<HTMLFormElement>) => {
     //refactor to setNewURI to default endpoint
     setBreeds([]);
-    setZip('');
+    setZip("");
     setZipCodes([]);
     setZipError(false);
     setMinAge(0);
     setMaxAge(0);
-  }
+  };
 
-
-  const removeBreedFilter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const removeBreedFilter = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     const selectedBreed = e.currentTarget.getAttribute("value");
-    if (selectedBreed === 'All') return setBreeds([]);
-    const filteredBreeds = breeds.filter((breed: string) => breed !== selectedBreed);
+    if (selectedBreed === "All") return setBreeds([]);
+    const filteredBreeds = breeds.filter(
+      (breed: string) => breed !== selectedBreed
+    );
     setBreeds(filteredBreeds);
   };
 
-  const removeZipFilter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const removeZipFilter = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     let selectedZip: string | null = e.currentTarget.getAttribute("value");
     const filteredZips = zipCodes.filter((zip: string) => {
       if (selectedZip) return parseInt(zip) !== parseInt(selectedZip);
@@ -114,7 +123,7 @@ export default function Home() {
 
   const showZipFilters = zipCodes.map((zip: string, idx: number) => {
     let zipStr = zip;
-    if (Number(zip) < 10000) zipStr = zip.padStart(5, '0');
+    if (Number(zip) < 10000) zipStr = zip.padStart(5, "0");
     return (
       <div key={idx}>
         <button
@@ -131,15 +140,16 @@ export default function Home() {
     );
   });
 
-  let i = 0; // Index as keys for breed options
 
   return (
     <div>
       <header className="header">
-        <h2 style={{ display: 'inline' }}>
-          Welcome to Fetch Dogs Adoption!
-        </h2>
-        <button id="logout" style={{ marginInline: '300px'}} onClick={handleLogOut}>
+        <h2 style={{ display: "inline" }}>Welcome to Fetch Dogs Adoption!</h2>
+        <button
+          id="logout"
+          style={{ marginInline: "300px" }}
+          onClick={handleLogOut}
+        >
           Log Out
         </button>
       </header>
@@ -150,8 +160,8 @@ export default function Home() {
             <label>Breed:&nbsp;&nbsp;</label>
             <select name={"breeds"} onChange={handleSelectBreed}>
               <option value="All">All</option>
-              {dogBreeds.map((breed) => (
-                <option key={i++} value={breed}>
+              {dogBreeds.map((breed, idx) => (
+                <option key={idx} value={breed}>
                   {breed}
                 </option>
               ))}
@@ -165,7 +175,12 @@ export default function Home() {
               value={zip}
               onChange={(e) => setZip(e.target.value)}
             />
-            <button style={{ cursor: "pointer" }} type="button" value={zip} onClick={handleZipCode}>
+            <button
+              style={{ cursor: "pointer" }}
+              type="button"
+              value={zip}
+              onClick={handleZipCode}
+            >
               Set
             </button>
             <br />
@@ -196,8 +211,11 @@ export default function Home() {
               onChange={handleMaxAge}
               max={100}
             />
-            <br /><br />
-            <button id="reset" type="submit">RESET</button>
+            <br />
+            <br />
+            <button id="reset" type="submit">
+              RESET
+            </button>
           </form>
           <br />
           <p>Filters</p>
@@ -205,13 +223,13 @@ export default function Home() {
           {showZipFilters}
         </div>
         <div className="rightCol">
-          <Dogs 
-            breeds={breeds} 
+          <Dogs
+            breeds={breeds}
             zipCodes={zipCodes}
             minAge={minAge}
             maxAge={maxAge}
-            // newURI={newURI}
-            // setNewURI={setNewURI}
+            newURI={newURI}
+            setNewURI={setNewURI}
           />
         </div>
       </div>
