@@ -13,16 +13,15 @@ export default function Home() {
   const [zipError, setZipError] = useState(false);
   const [minAge, setMinAge] = useState(0);
   const [maxAge, setMaxAge] = useState(0);
-  const [newURI, setNewURI] = useState(
-    'https://frontend-take-home-service.fetch.com/dogs/search?size=100'
-  );
+  // const [newURI, setNewURI] = useState(
+  //   'https://frontend-take-home-service.fetch.com/dogs/search?size=100'
+  // );
   
   const navigate = useNavigate();
   // console.log(newURI)
   
   useEffect(() => {
     getBreeds();
-    setNewURI(querySearch(breeds, zipCodes, minAge, maxAge));
   }, []);
   
   function getBreeds() {
@@ -211,8 +210,8 @@ export default function Home() {
             zipCodes={zipCodes}
             minAge={minAge}
             maxAge={maxAge}
-            newURI={newURI}
-            setNewURI={setNewURI}
+            // newURI={newURI}
+            // setNewURI={setNewURI}
           />
         </div>
       </div>

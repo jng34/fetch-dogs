@@ -4,8 +4,6 @@ export const querySearch = (
   minAge: number,
   maxAge: number,
   endPoint: string = '/dogs/search?size=100&',
-  // displaySize: number,
-  // searchIndex: number,
 ) => {
   let uri = `https://frontend-take-home-service.fetch.com${endPoint}`;
   breeds.forEach((breed: string) => {
@@ -17,8 +15,6 @@ export const querySearch = (
     uri += queryStr;
   })
   if (minAge) uri += `ageMin=${minAge}&`;
-  if (maxAge) uri += `ageMax=${maxAge}&`;
-  // const newURI = uri + `size=100`;
-  // const newURI = uri + `size=${displaySize}&from=${searchIndex}`;
+  if (maxAge) uri += `ageMax=${maxAge}`;
   return uri;
 };

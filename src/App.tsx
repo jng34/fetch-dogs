@@ -3,8 +3,6 @@ import ErrorPage from "./components/ErrorPage";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import { Routes, Route, Navigate, Outlet, useNavigate } from "react-router-dom";
-import { stringify } from "querystring";
-import { createContext } from "vm";
 
 // AuthRoutes serves as an authorization middleware
 // const AuthRoutes = () => {
