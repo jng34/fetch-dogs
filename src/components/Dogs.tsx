@@ -112,7 +112,6 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewU
         displaySize={displaySize}
         toggleMatch={toggleMatch}
         setToggleMatch={setToggleMatch}
-        // displayDogCard={displayDogCard}
       />
       <Pagination
         className="pagination-bar"

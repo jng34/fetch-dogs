@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { Modal, Button, Row, Col, Container } from "react-bootstrap";
-import DogCard from "./DogCard";
+import { Image } from "react-bootstrap";
+import DogModal from "./DogModal";
 
 interface Dog {
   id: string,
@@ -17,8 +17,6 @@ interface Props {
   displaySize: number;
   toggleMatch: boolean;
   setToggleMatch: (arg: boolean) => void;
-  // displayDogCard: (arg: number) => void;
-  // displayDogCard: (arg: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => void;
 }
 
 export default function DogsTable({
@@ -27,7 +25,6 @@ export default function DogsTable({
   displaySize,
   toggleMatch,
   setToggleMatch,
-  // displayDogCard
 }: Props) {
   const [toggleModal, setToggleModal] = useState(false);
   const [modalData, setModalData] = useState({
@@ -39,7 +36,6 @@ export default function DogsTable({
     breed: "",
   });
 
-  console.log(modalData)
   const currentDogs = useMemo(() => {
     // if (toggleMatch) return dogObjs  ;
     const firstPageIndex = ((currentPage - 1) * displaySize) % 100;
@@ -75,10 +71,15 @@ export default function DogsTable({
                   }}
                   >
                   <td>
-                    <img
+                    <Image
                       src={dogObj.img}
                       style={{ width: "5rem", height: "5rem" }}
-                      />
+                      rounded
+                    />
+                    {/* <img
+                      src={dogObj.img}
+                      style={{ width: "5rem", height: "5rem" }}
+                    /> */}
                   </td>
                   <td>{dogObj.name}</td>
                   <td>{dogObj.age}</td>
@@ -90,51 +91,11 @@ export default function DogsTable({
           })}
         </tbody>
       </table>
-      {/* {modalData.name ? 
-      <DogCard 
+      <DogModal 
         dogObj={modalData}
         toggleModal={toggleModal}
         setToggleModal={setToggleModal}
       />
-      : 
-      <></>
-      } */}
-      <Modal show={toggleModal} onHide={() => setToggleModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{modalData.name}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Container>
-            <Row>
-              <Col>
-                <img src={modalData.img} alt="dog" />
-              </Col>
-              <Col>
-                <ul>
-                  <li>
-                    Breed: {modalData.breed}
-                  </li>
-                  <li>
-                    age: {modalData.age}
-                  </li>
-                  <li>
-                    zip_code: {modalData.zip_code}
-                  </li>
-                </ul>
-              
-              </Col>
-            </Row>
-          </Container>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => console.log(false)}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={() => console.log('selected')}>
-            Select
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 }
