@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../index.css";
 import Dogs from "./Dogs";
 import { querySearch } from "./querySearch";
+import { Col, Container, Row } from "react-bootstrap";
 
 export default function Home() {
   const [dogBreeds, setDogBreeds] = useState([]);
@@ -21,7 +22,21 @@ export default function Home() {
   useEffect(() => {
     getBreeds();
     setNewURI(querySearch(breeds, zipCodes, minAge, maxAge));
+    // getLocationObjs()
   }, [breeds, zipCodes, minAge, maxAge]);
+
+  // render with Dog Card
+  function getLocationObjs() {
+    fetch("https://frontend-take-home-service.fetch.com/locations", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(zipCodes),
+      headers: { "Content-type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }
+  ///
 
   function getBreeds() {
     fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
@@ -142,7 +157,7 @@ export default function Home() {
 
 
   return (
-    <div>
+    <Container>
       <header className="header">
         <h2 style={{ display: "inline" }}>Welcome to Fetch Dogs Adoption!</h2>
         <button
@@ -153,8 +168,8 @@ export default function Home() {
           Log Out
         </button>
       </header>
-      <div className="row">
-        <div className="leftCol">
+      <Row>
+        <Col>
           <h4>Search:</h4>
           <form onSubmit={onReset}>
             <label>Breed:&nbsp;&nbsp;</label>
@@ -221,8 +236,8 @@ export default function Home() {
           <p>Filters</p>
           {showBreedFilters}
           {showZipFilters}
-        </div>
-        <div className="rightCol">
+        </Col>
+        <Col>
           <Dogs
             breeds={breeds}
             zipCodes={zipCodes}
@@ -231,8 +246,100 @@ export default function Home() {
             newURI={newURI}
             setNewURI={setNewURI}
           />
-        </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
+    // <div>
+    //   <header className="header">
+    //     <h2 style={{ display: "inline" }}>Welcome to Fetch Dogs Adoption!</h2>
+    //     <button
+    //       id="logout"
+    //       style={{ marginInline: "300px" }}
+    //       onClick={handleLogOut}
+    //     >
+    //       Log Out
+    //     </button>
+    //   </header>
+    //   <div className="row">
+    //     <div className="leftCol">
+    //       <h4>Search:</h4>
+    //       <form onSubmit={onReset}>
+    //         <label>Breed:&nbsp;&nbsp;</label>
+    //         <select name={"breeds"} onChange={handleSelectBreed}>
+    //           <option value="All">All</option>
+    //           {dogBreeds.map((breed, idx) => (
+    //             <option key={idx} value={breed}>
+    //               {breed}
+    //             </option>
+    //           ))}
+    //         </select>
+    //         <br />
+    //         <label>Zip Code:&nbsp;&nbsp;</label>
+    //         <input
+    //           type="number"
+    //           name="zipcode"
+    //           placeholder="zip"
+    //           value={zip}
+    //           onChange={(e) => setZip(e.target.value)}
+    //         />
+    //         <button
+    //           style={{ cursor: "pointer" }}
+    //           type="button"
+    //           value={zip}
+    //           onClick={handleZipCode}
+    //         >
+    //           Set
+    //         </button>
+    //         <br />
+    //         {zipError ? (
+    //           <>
+    //             <span style={{ color: "red" }}>
+    //               Please enter a valid zip code
+    //             </span>
+    //             <br />
+    //           </>
+    //         ) : (
+    //           <></>
+    //         )}
+    //         <label>Min age:&nbsp;&nbsp;</label>
+    //         <input
+    //           type="number"
+    //           name="minAge"
+    //           placeholder="min"
+    //           onChange={handleMinAge}
+    //           min={0}
+    //         />
+    //         <br />
+    //         <label>Max age:&nbsp;&nbsp;</label>
+    //         <input
+    //           type="number"
+    //           name="maxAge"
+    //           placeholder="max"
+    //           onChange={handleMaxAge}
+    //           max={100}
+    //         />
+    //         <br />
+    //         <br />
+    //         <button id="reset" type="submit">
+    //           RESET
+    //         </button>
+    //       </form>
+    //       <br />
+    //       <p>Filters</p>
+    //       {showBreedFilters}
+    //       {showZipFilters}
+    //     </div>
+    //     <div className="rightCol">
+    //       <Dogs
+    //         breeds={breeds}
+    //         zipCodes={zipCodes}
+    //         minAge={minAge}
+    //         maxAge={maxAge}
+    //         newURI={newURI}
+    //         setNewURI={setNewURI}
+    //       />
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
