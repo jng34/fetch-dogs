@@ -1,27 +1,16 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { useNavigate, Link, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import "../index.css";
 
-interface User {
-  name: string,
-  email: string
-}
-
-interface Props {
-  user: User, 
-  setUser: (user: User) => void
-}
 
 export default function Login() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    invalidEmail: '',
-  })
-  
-  const emailCheck = /.+\@.+\..+/;
+  const [nameErr, setNameErr] = useState('');
+  const [emailErr, setEmailErr] = useState('');
+  const [badEmailErr, setBadEmailErr] = useState('');
+
+  const emailCheck = /.+\@.+\.[a-zA-Z]{2,}/;
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -42,10 +31,9 @@ export default function Login() {
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name) setErrors({ ...errors, name: 'Name is required' });
-    if (!email) setErrors({ ...errors, email: 'Email is required' });
-    if (!emailCheck.test(email)) setErrors({ ...errors, invalidEmail: 'Invalid email' });
-
+    setNameErr('');
+    setEmailErr('');
+    setBadEmailErr('');
     //Authenticate user
     try {
       const auth = await fetch('https://frontend-take-home-service.fetch.com/auth/login', {
@@ -54,14 +42,18 @@ export default function Login() {
         body: JSON.stringify({ name, email }),
         headers: { 'Content-type': 'application/json' }
       });
-      if (auth.status === 200) navigate("/home", { state: { name }}); 
+      if (auth.status === 200) {
+        navigate("/home", { state: { name }});
+      } else {
+        if (!name) setNameErr('Name is required');
+        if (!email) setEmailErr('Email is required');
+        if (email && !emailCheck.test(email)) setBadEmailErr('Invalid email');
+      } 
     } catch (error) {
       navigate("/error");  
     }
   }
 
-  //Check if user auth exists
-  // if (user.name) navigate('/home');
 
   return (
     <div className='pageLayout'>
@@ -70,11 +62,16 @@ export default function Login() {
         <form onSubmit={handleLogin}>
           <label>Name</label><br/>
           <input type='text' value={name} onChange={(e) => setName(e.target.value)}></input>
-          {!errors.name ? <span style={{ color: 'red' }}>{errors.name}</span> : <></>}<br/>
-          <label>Email</label><br/>
+          <br/>
+          {nameErr ? <span style={{ color: 'red' }}>{nameErr}</span> : <></>}
+          <br/>
+          <label>Email</label>
+          <br/>
           <input type='text' value={email} onChange={(e) => setEmail(e.target.value)}></input>
-          {!errors.email ? <span style={{ color: 'red' }}>{errors.email}</span> : <></>}
-          {!errors.invalidEmail ? <span style={{ color: 'red' }}>{errors.invalidEmail}</span> : <></>}<br/>
+          <br/>
+          {emailErr ? <span style={{ color: 'red' }}>{emailErr}</span> : <></>}
+          {badEmailErr ? <span style={{ color: 'red' }}>{badEmailErr}</span> : <></>}          
+          <br/>
           <button type='submit'>Submit</button>
         </form>
     </div>
