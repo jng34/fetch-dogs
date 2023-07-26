@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import "../index.css";
 import { querySearch } from "./querySearch";
 import Pagination from "./Pagination";
@@ -44,11 +44,11 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewU
       });
   }
 
-  function getDogObjs(arr: string[]) {
+  function getDogObjs(dogIDarr: string[]) {
     fetch("https://frontend-take-home-service.fetch.com/dogs", {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(arr),
+      body: JSON.stringify(dogIDarr),
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
@@ -58,11 +58,11 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewU
   };
 
 
-  function getDogMatch(arr: string[]) {
+  function getDogMatch(dogIDarr: string[]) {
     fetch("https://frontend-take-home-service.fetch.com/dogs/match", {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(arr),
+      body: JSON.stringify(dogIDarr),
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
@@ -74,11 +74,6 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewU
     getDogObjs([dogMatch]);
   }
 
-  // Need to configure
-  const displayDogCard = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
-    console.log(e)
-    return
-  }
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -95,7 +90,7 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewU
   
   return (
     <div>
-      <div style={{ margin: '20px'}}>
+      <div style={{ margin: '20px' }}>
         <h4 style={{ display: 'inline', marginRight: '200px' }}>Total: {totalDogs}</h4>
         Choose a dog or <button id="match" type="button" onClick={handleDogMatch}>MATCH ME</button>
       </div>

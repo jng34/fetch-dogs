@@ -37,7 +37,7 @@ export default function DogsTable({
   });
 
   const currentDogs = useMemo(() => {
-    // if (toggleMatch) return dogObjs  ;
+    if (toggleMatch) return dogObjs;
     const firstPageIndex = ((currentPage - 1) * displaySize) % 100;
     const lastPageIndex = 
       (firstPageIndex + displaySize) % 100 
@@ -76,10 +76,6 @@ export default function DogsTable({
                       style={{ width: "5rem", height: "5rem" }}
                       rounded
                     />
-                    {/* <img
-                      src={dogObj.img}
-                      style={{ width: "5rem", height: "5rem" }}
-                    /> */}
                   </td>
                   <td>{dogObj.name}</td>
                   <td>{dogObj.age}</td>
