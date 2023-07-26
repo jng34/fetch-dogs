@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Player } from '@lottiefiles/react-lottie-player';
 import "../index.css";
+import { Col, Container, Row } from 'react-bootstrap';
 
 
 export default function Login() {
@@ -56,24 +58,40 @@ export default function Login() {
 
 
   return (
-    <div className='pageLayout'>
-      <h1>Fetch Dogs Adoption</h1>
-      <h3>Save and bring home a dog today!</h3>
-        <form onSubmit={handleLogin}>
-          <label>Name</label><br/>
-          <input type='text' value={name} onChange={(e) => setName(e.target.value)}></input>
-          <br/>
-          {nameErr ? <span style={{ color: 'red' }}>{nameErr}</span> : <></>}
-          <br/>
-          <label>Email</label>
-          <br/>
-          <input type='text' value={email} onChange={(e) => setEmail(e.target.value)}></input>
-          <br/>
-          {emailErr ? <span style={{ color: 'red' }}>{emailErr}</span> : <></>}
-          {badEmailErr ? <span style={{ color: 'red' }}>{badEmailErr}</span> : <></>}          
-          <br/>
-          <button type='submit'>Submit</button>
-        </form>
+    <div>
+        <Row className="d-flex align-items-center" >
+          <Col md={4} className='text-end'>
+            <h1>Fetch Dogs Adoption</h1>
+            <h6>Save and bring home a dog today!</h6>
+          </Col>
+          <Col xs={1} >
+            <Player
+              autoplay
+              loop
+              background=''
+              speed={1}
+              src="https://lottie.host/f5297362-d27b-470a-9bdf-bd31f933bce9/IQVCfsP6HQ.json"
+              style={{ height: "200px", width: "200px" }}
+              />
+          </Col>
+        </Row>
+        <Row style={{ marginLeft: '100px'}}>
+          <form onSubmit={handleLogin}>
+            <label>Name</label><br/>
+            <input type='text' value={name} onChange={(e) => setName(e.target.value)}></input>
+            <br/>
+            {nameErr ? <span style={{ color: 'red' }}>{nameErr}</span> : <></>}
+            <br/>
+            <label>Email</label>
+            <br/>
+            <input type='text' value={email} onChange={(e) => setEmail(e.target.value)}></input>
+            <br/>
+            {emailErr ? <span style={{ color: 'red' }}>{emailErr}</span> : <></>}
+            {badEmailErr ? <span style={{ color: 'red' }}>{badEmailErr}</span> : <></>}          
+            <br/>
+            <button type='submit'>Submit</button>
+          </form>
+        </Row>
     </div>
   )
 }

@@ -25,7 +25,7 @@ export default function Home() {
     // getLocationObjs()
   }, [breeds, zipCodes, minAge, maxAge]);
 
-  // render with Dog Card
+  
   function getLocationObjs() {
     fetch("https://frontend-take-home-service.fetch.com/locations", {
       method: "POST",
@@ -89,7 +89,7 @@ export default function Home() {
   };
 
   const onReset = (e: FormEvent<HTMLFormElement>) => {
-    //refactor to setNewURI to default endpoint
+    e.preventDefault();
     setBreeds([]);
     setZip("");
     setZipCodes([]);

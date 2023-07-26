@@ -13,15 +13,17 @@ interface Props {
   setNewURI: (arg: any) => void,
 }
 
+const displaySize = 10;
+
 export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewURI }: Props) {
   const [toggleMatch, setToggleMatch] = useState(false);
-  const [dogMatch, setDogMatch] = useState(''); //simplePagination
+  const [dogMatch, setDogMatch] = useState(''); 
   const [dogObjs, setDogObjs] = useState([]);
   const [totalDogs, setTotalDogs] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [prevDogsURI, setPrevDogsURI] = useState('');
   const [nextDogsURI, setNextDogsURI] = useState('');
-  const displaySize = 10;
+  
 
   useEffect(() => {
     getDogIds(newURI);
