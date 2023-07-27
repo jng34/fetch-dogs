@@ -94,8 +94,7 @@ export default function Dogs({
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    if (page === 1)
-      return setUri(querySearch(breeds, zipCodes, minAge, maxAge));
+    if (page === 1) return setUri(uri);
     const searchIndex = (page - 1) * displaySize;
     if (searchIndex >= 100 && searchIndex % 100 === 0) {
       return setUri(
