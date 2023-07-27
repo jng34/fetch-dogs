@@ -50,7 +50,7 @@ export default function DogModal({ dogObj, toggleModal, setToggleModal }: Props)
           Close
         </Button>
         <Button variant="primary" onClick={() => console.log('selected')}>
-          Select
+          Adopt
         </Button>
       </Modal.Footer>
     </Modal>

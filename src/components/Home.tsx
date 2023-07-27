@@ -2,7 +2,7 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import Dogs from "./Dogs";
-import { querySearch } from "./querySearch";
+import { querySearch, baseURI, breedSearch, zipSearch, minAgeSearch, maxAgeSearch, sortByField } from "./queryParams";
 import { Col, Container, Row } from "react-bootstrap";
 
 export default function Home() {
@@ -11,33 +11,51 @@ export default function Home() {
   const [zip, setZip] = useState("");
   const [zipCodes, setZipCodes] = useState([]);
   const [zipError, setZipError] = useState(false);
-  const [minAge, setMinAge] = useState(0);
-  const [maxAge, setMaxAge] = useState(0);
-  const [newURI, setNewURI] = useState(
-    querySearch(breeds, zipCodes, minAge, maxAge)
+  const [minAge, setMinAge] = useState(-1);
+  const [maxAge, setMaxAge] = useState(-1);
+  const [sortName, setSortName] = useState(false);
+  const [sortAge, setSortAge] = useState(false);
+  const [sortBreed, setSortBreed] = useState(false);
+  const [sortZip, setSortZip] = useState(false);
+  const [uri, setUri] = useState(
+    // querySearch(breeds, zipCodes, minAge, maxAge)
+    baseURI
   );
+  const [currentPage, setCurrentPage] = useState(1);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     getBreeds();
-    setNewURI(querySearch(breeds, zipCodes, minAge, maxAge));
+    // setUri(
+    //   querySearch(
+    //     breeds, 
+    //     zipCodes, 
+    //     minAge, 
+    //     maxAge, 
+    //     // sortName, 
+    //     // sortAge, 
+    //     // sortBreed, 
+    //     // sortZip
+    //   )
+    // );
     // getLocationObjs()
-  }, [breeds, zipCodes, minAge, maxAge]);
+  }, [breeds, zipCodes, minAge, maxAge, sortName, sortAge, sortBreed, sortZip]);
 
   
-  function getLocationObjs() {
-    fetch("https://frontend-take-home-service.fetch.com/locations", {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify(zipCodes),
-      headers: { "Content-type": "application/json" },
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  }
-  ///
+  // function getLocationObjs() {
+  //   fetch("https://frontend-take-home-service.fetch.com/locations", {
+  //     method: "POST",
+  //     credentials: "include",
+  //     body: JSON.stringify(zipCodes),
+  //     headers: { "Content-type": "application/json" },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => console.log(data));
+  // }
+  // ///
 
+  // Auth check
   function getBreeds() {
     fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
       method: "GET",
@@ -59,12 +77,39 @@ export default function Home() {
     }).then(() => navigate("/"));
   };
 
+
+  // Breeds
   const handleSelectBreed = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "All") return setBreeds([]);
+    const selectedBreed = e.target.value;
+    if (selectedBreed === "All") {
+      setBreeds([]);
+      setUri(querySearch([], zipCodes, minAge, maxAge));
+      return;
+    }
     let breedArr: any = [...breeds, e.target.value];
     setBreeds(breedArr);
+    let query = breedSearch(breedArr);
+    setUri(uri + query)
+    setCurrentPage(1);
   };
 
+  const removeBreedFilter = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const removeBreed = e.currentTarget.getAttribute("value");
+    const filteredBreeds = breeds.filter(
+      (breed: string) => breed !== removeBreed
+    );
+    setBreeds(filteredBreeds);
+    let newURI; 
+    if (removeBreed) {
+      newURI = uri.replace(`&breeds=${encodeURIComponent(removeBreed)}`, '');
+      setUri(newURI);
+    }
+  };
+
+
+  // Zip Codes
   const handleZipCode = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -78,35 +123,8 @@ export default function Home() {
     const zipArr: any = [...zipCodes, input];
     setZipCodes(zipArr);
     setZipError(false);
-  };
-
-  const handleMinAge = (e: ChangeEvent<HTMLInputElement>) => {
-    setMinAge(Number(e.target.value));
-  };
-
-  const handleMaxAge = (e: ChangeEvent<HTMLInputElement>) => {
-    setMaxAge(Number(e.target.value));
-  };
-
-  const onReset = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setBreeds([]);
-    setZip("");
-    setZipCodes([]);
-    setZipError(false);
-    setMinAge(0);
-    setMaxAge(0);
-  };
-
-  const removeBreedFilter = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    const selectedBreed = e.currentTarget.getAttribute("value");
-    if (selectedBreed === "All") return setBreeds([]);
-    const filteredBreeds = breeds.filter(
-      (breed: string) => breed !== selectedBreed
-    );
-    setBreeds(filteredBreeds);
+    let query = zipSearch(zipArr);
+    setUri(uri + query);
   };
 
   const removeZipFilter = (
@@ -117,7 +135,40 @@ export default function Home() {
       if (selectedZip) return parseInt(zip) !== parseInt(selectedZip);
     });
     setZipCodes(filteredZips);
+    let query = zipSearch(filteredZips);
+    setUri(baseURI + query);
   };
+
+  // Min Age
+  const handleMinAge = (e: ChangeEvent<HTMLInputElement>) => {
+    const age = Number(e.target.value)
+    setMinAge(age);
+    const newQuery = uri + minAgeSearch(age);
+    setUri(newQuery);
+  };
+
+
+  // Max Age
+  const handleMaxAge = (e: ChangeEvent<HTMLInputElement>) => {
+    const age = Number(e.target.value)
+    setMaxAge(age);
+    const newQuery = uri + maxAgeSearch(age);
+    setUri(newQuery);
+  };
+
+
+  // Reset
+  const onReset = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setBreeds([]);
+    setZip("");
+    setZipCodes([]);
+    setZipError(false);
+    setMinAge(0);
+    setMaxAge(0);
+    setUri(baseURI);
+  };
+
 
   const showBreedFilters = breeds.map((breed: string, idx: number) => {
     return (
@@ -156,13 +207,42 @@ export default function Home() {
   });
 
 
+  const handleSortByName = () => {
+    setSortName(!sortName);
+    const queryStr = sortByField(uri, 'name', sortName);
+    setUri(queryStr);
+  }
+
+  const handleSortByAge = () => {
+    setSortAge(!sortAge);
+    console.log(sortAge)
+    if (!sortAge) {
+      setUri(uri + '&sort=age:asc')
+    } else {
+      setUri(uri + '&sort=age:desc')
+    }
+  }
+  
+  const handleSortByBreed = () => {
+    setSortBreed(!sortBreed);
+    if (!sortBreed) {
+      setUri(uri + '&sort=breed:asc')
+    } else {
+      setUri(uri + '&sort=breed:desc')
+    }
+  }
+
+  const handleSortByZip = () => {
+    //configure this!
+    setSortZip(!sortZip);
+  }
+
+
   return (
     <Container>
       <header className="header">
         <h2 style={{ display: "inline" }}>Welcome to Fetch Dogs Adoption!</h2>
         <button
-          // id="logout"
-          // className="justify-content-end"
           style={{ marginInline: "300px" }}
           onClick={handleLogOut}
         >
@@ -244,8 +324,14 @@ export default function Home() {
             zipCodes={zipCodes}
             minAge={minAge}
             maxAge={maxAge}
-            newURI={newURI}
-            setNewURI={setNewURI}
+            uri={uri}
+            setUri={setUri}
+            onSortName={handleSortByName}
+            onSortAge={handleSortByAge}
+            onSortBreed={handleSortByBreed}
+            onSortZip={handleSortByZip}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
           />
         </Col>
       </Row>

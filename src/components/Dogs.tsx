@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../index.css";
-import { querySearch } from "./querySearch";
+import { querySearch } from "./queryParams";
 import Pagination from "./Pagination";
 import DogsTable from "./DogsTable";
 
@@ -9,26 +9,43 @@ interface Props {
   zipCodes: string[],
   minAge: number,
   maxAge: number,
-  newURI: string,
-  setNewURI: (arg: any) => void,
+  uri: string,
+  setUri: (arg: any) => void,
+  onSortName: (arg: any) => void,
+  onSortAge: (arg: any) => void,
+  onSortBreed: (arg: any) => void,
+  onSortZip: (arg: any) => void,
+  currentPage: number,
+  setCurrentPage: (arg: any) => void,
 }
 
 const displaySize = 10;
 
-export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewURI }: Props) {
+export default function Dogs({
+  breeds,
+  zipCodes,
+  minAge,
+  maxAge,
+  uri,
+  setUri,
+  onSortName,
+  onSortAge,
+  onSortBreed,
+  onSortZip,
+  currentPage,
+  setCurrentPage,
+}: Props) {
   const [toggleMatch, setToggleMatch] = useState(false);
-  const [dogMatch, setDogMatch] = useState(''); 
+  const [dogMatch, setDogMatch] = useState("");
   const [dogObjs, setDogObjs] = useState([]);
   const [totalDogs, setTotalDogs] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [prevDogsURI, setPrevDogsURI] = useState('');
-  const [nextDogsURI, setNextDogsURI] = useState('');
-  
+  // const [currentPage, setCurrentPage] = useState(1);
+  const [prevDogsURI, setPrevDogsURI] = useState("");
+  const [nextDogsURI, setNextDogsURI] = useState("");
 
   useEffect(() => {
-    getDogIds(newURI);
-  }, [newURI, currentPage, toggleMatch]);
-
+    getDogIds(uri);
+  }, [uri, currentPage, toggleMatch, breeds, zipCodes, minAge, maxAge]);
 
   function getDogIds(uri: string) {
     fetch(uri, {
@@ -56,9 +73,8 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewU
       .then((res) => res.json())
       .then((data) => {
         setDogObjs(data);
-      })
-  };
-
+      });
+  }
 
   function getDogMatch(dogIDarr: string[]) {
     fetch("https://frontend-take-home-service.fetch.com/dogs/match", {
@@ -68,33 +84,41 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewU
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
-      .then((data) => setDogMatch(data.match))
-  };
+      .then((data) => setDogMatch(data.match));
+  }
 
   const handleDogMatch = () => {
     setToggleMatch(true);
     getDogObjs([dogMatch]);
-  }
-
+  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    if (page === 1) return setNewURI(querySearch(breeds, zipCodes, minAge, maxAge));
-    const searchIndex = ((page - 1) * displaySize);
+    if (page === 1)
+      return setUri(querySearch(breeds, zipCodes, minAge, maxAge));
+    const searchIndex = (page - 1) * displaySize;
     if (searchIndex >= 100 && searchIndex % 100 === 0) {
-      return setNewURI(querySearch(breeds, zipCodes, minAge, maxAge, nextDogsURI));
+      return setUri(
+        querySearch(breeds, zipCodes, minAge, maxAge, nextDogsURI)
+      );
     }
     if (searchIndex < 100 && searchIndex % 100 === 0) {
-      return setNewURI(querySearch(breeds, zipCodes, minAge, maxAge, '', prevDogsURI));
+      return setUri(
+        querySearch(breeds, zipCodes, minAge, maxAge, "", prevDogsURI)
+      );
     }
   };
 
-  
   return (
     <div>
-      <div style={{ margin: '20px' }}>
-        <h4 style={{ display: 'inline', marginRight: '200px' }}>Total: {totalDogs}</h4>
-        Choose a dog or <button id="match" type="button" onClick={handleDogMatch}>MATCH ME</button>
+      <div style={{ margin: "20px" }}>
+        <h4 style={{ display: "inline", marginRight: "200px" }}>
+          Total: {totalDogs}
+        </h4>
+        Choose a dog or{" "}
+        <button id="match" type="button" onClick={handleDogMatch}>
+          MATCH ME
+        </button>
       </div>
       <Pagination
         className="pagination-bar"
@@ -103,12 +127,15 @@ export default function Dogs({ breeds, zipCodes, minAge, maxAge, newURI, setNewU
         pageSize={displaySize}
         onPageChange={(page: number) => handlePageChange(page)}
       />
-      <DogsTable 
+      <DogsTable
         dogObjs={dogObjs}
         currentPage={currentPage}
         displaySize={displaySize}
         toggleMatch={toggleMatch}
-        setToggleMatch={setToggleMatch}
+        onSortName={onSortName}
+        onSortAge={onSortAge}
+        onSortBreed={onSortBreed}
+        onSortZip={onSortZip}
       />
       <Pagination
         className="pagination-bar"
