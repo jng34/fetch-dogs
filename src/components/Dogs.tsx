@@ -10,13 +10,13 @@ interface Props {
   minAge: number,
   maxAge: number,
   uri: string,
+  currentPage: number,
   setUri: (arg: any) => void,
+  setCurrentPage: (arg: any) => void,
   onSortName: (arg: any) => void,
   onSortAge: (arg: any) => void,
   onSortBreed: (arg: any) => void,
   onSortZip: (arg: any) => void,
-  currentPage: number,
-  setCurrentPage: (arg: any) => void,
 }
 
 const displaySize = 10;
@@ -27,19 +27,18 @@ export default function Dogs({
   minAge,
   maxAge,
   uri,
+  currentPage,
   setUri,
+  setCurrentPage,
   onSortName,
   onSortAge,
   onSortBreed,
   onSortZip,
-  currentPage,
-  setCurrentPage,
 }: Props) {
   const [toggleMatch, setToggleMatch] = useState(false);
   const [dogMatch, setDogMatch] = useState("");
   const [dogObjs, setDogObjs] = useState([]);
   const [totalDogs, setTotalDogs] = useState(0);
-  // const [currentPage, setCurrentPage] = useState(1);
   const [prevDogsURI, setPrevDogsURI] = useState("");
   const [nextDogsURI, setNextDogsURI] = useState("");
 

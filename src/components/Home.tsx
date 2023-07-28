@@ -11,34 +11,19 @@ export default function Home() {
   const [zip, setZip] = useState("");
   const [zipCodes, setZipCodes] = useState([]);
   const [zipError, setZipError] = useState(false);
-  const [minAge, setMinAge] = useState(-1);
-  const [maxAge, setMaxAge] = useState(-1);
+  const [minAge, setMinAge] = useState(0);
+  const [maxAge, setMaxAge] = useState(0);
   const [sortName, setSortName] = useState(false);
   const [sortAge, setSortAge] = useState(false);
   const [sortBreed, setSortBreed] = useState(false);
   const [sortZip, setSortZip] = useState(false);
-  const [uri, setUri] = useState(
-    // querySearch(breeds, zipCodes, minAge, maxAge)
-    baseURI
-  );
+  const [uri, setUri] = useState(baseURI);
   const [currentPage, setCurrentPage] = useState(1);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     getBreeds();
-    // setUri(
-    //   querySearch(
-    //     breeds, 
-    //     zipCodes, 
-    //     minAge, 
-    //     maxAge, 
-    //     // sortName, 
-    //     // sortAge, 
-    //     // sortBreed, 
-    //     // sortZip
-    //   )
-    // );
     // getLocationObjs()
   }, [breeds, zipCodes, minAge, maxAge, sortName, sortAge, sortBreed, sortZip]);
 
@@ -83,13 +68,13 @@ export default function Home() {
     const selectedBreed = e.target.value;
     if (selectedBreed === "All") {
       setBreeds([]);
-      setUri(querySearch([], zipCodes, minAge, maxAge));
+      setUri(querySearch([], [], 0, 0));
       return;
     }
     let breedArr: any = [...breeds, e.target.value];
     setBreeds(breedArr);
     let query = breedSearch(breedArr);
-    setUri(uri + query)
+    setUri(uri + query);
     setCurrentPage(1);
   };
 
@@ -101,9 +86,11 @@ export default function Home() {
       (breed: string) => breed !== removeBreed
     );
     setBreeds(filteredBreeds);
-    let newURI; 
+    if (filteredBreeds.length === 0) {
+      return setUri(querySearch(filteredBreeds, zipCodes, minAge, maxAge));
+    }
     if (removeBreed) {
-      newURI = uri.replace(`&breeds=${encodeURIComponent(removeBreed)}`, '');
+      let newURI = uri.replace(`&breeds=${encodeURIComponent(removeBreed)}`, '');
       setUri(newURI);
     }
   };
@@ -130,30 +117,54 @@ export default function Home() {
   const removeZipFilter = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    let selectedZip: string | null = e.currentTarget.getAttribute("value");
-    const filteredZips = zipCodes.filter((zip: string) => {
-      if (selectedZip) return parseInt(zip) !== parseInt(selectedZip);
-    });
-    setZipCodes(filteredZips);
-    let query = zipSearch(filteredZips);
-    setUri(baseURI + query);
+    let removeZip: string | null = e.currentTarget.getAttribute("value");
+    if (removeZip) {   
+      const filteredZips = zipCodes.filter((zip: string) => {
+        if (removeZip) return parseInt(zip) !== parseInt(removeZip);
+      });
+      setZipCodes(filteredZips);
+      let newURI = uri.replace(`&zipCodes=${encodeURIComponent(removeZip)}`, '');
+      setUri(newURI);
+    }
   };
 
   // Min Age
   const handleMinAge = (e: ChangeEvent<HTMLInputElement>) => {
-    const age = Number(e.target.value)
-    setMinAge(age);
-    const newQuery = uri + minAgeSearch(age);
-    setUri(newQuery);
+    console.log(uri)
+    const prevMin = minAge;
+    const newMin = Number(e.target.value);
+    setMinAge(newMin);
+    let newURI = '';
+    if (newMin > 0) {
+      if (uri.includes(minAgeSearch(prevMin))) {
+        newURI = uri.replace(minAgeSearch(prevMin), minAgeSearch(newMin)); 
+      } else {
+        newURI = uri + minAgeSearch(newMin);
+      }
+    } else {
+      newURI = uri.replace(minAgeSearch(prevMin), minAgeSearch(newMin)); 
+    }
+    setUri(newURI);
   };
 
 
   // Max Age
   const handleMaxAge = (e: ChangeEvent<HTMLInputElement>) => {
-    const age = Number(e.target.value)
-    setMaxAge(age);
-    const newQuery = uri + maxAgeSearch(age);
-    setUri(newQuery);
+    const prevMax = maxAge;
+    const newMax = Number(e.target.value);
+    console.log(newMax)
+    setMaxAge(newMax);
+    let newURI = '';
+    if (newMax > 0) {
+      if (uri.includes(maxAgeSearch(prevMax))) {
+        newURI = uri.replace(maxAgeSearch(prevMax), maxAgeSearch(newMax)); 
+      } else {
+        newURI = uri + maxAgeSearch(newMax);
+      }
+    } else {
+      newURI = uri.replace(maxAgeSearch(prevMax), maxAgeSearch(newMax)); 
+    }
+    setUri(newURI);
   };
 
 
@@ -215,21 +226,14 @@ export default function Home() {
 
   const handleSortByAge = () => {
     setSortAge(!sortAge);
-    console.log(sortAge)
-    if (!sortAge) {
-      setUri(uri + '&sort=age:asc')
-    } else {
-      setUri(uri + '&sort=age:desc')
-    }
+    const queryStr = sortByField(uri, 'age', sortAge);
+    setUri(queryStr);
   }
   
   const handleSortByBreed = () => {
     setSortBreed(!sortBreed);
-    if (!sortBreed) {
-      setUri(uri + '&sort=breed:asc')
-    } else {
-      setUri(uri + '&sort=breed:desc')
-    }
+    const queryStr = sortByField(uri, 'breed', sortBreed);
+    setUri(queryStr);
   }
 
   const handleSortByZip = () => {

@@ -11,8 +11,8 @@ export function querySearch(
 ) {
   let newURI = `https://frontend-take-home-service.fetch.com${nextEndPt || prevEndPt || defaultEndPt}`;
   newURI += breedSearch(breeds) + zipSearch(zipCodes);
-  if (minAge >= 0) newURI += minAgeSearch(minAge);
-  if (minAge >= 0) newURI += maxAgeSearch(maxAge);
+  if (minAge > 0) newURI += minAgeSearch(minAge);
+  if (maxAge > 0) newURI += maxAgeSearch(maxAge);
   return newURI;
 };
 
@@ -43,17 +43,18 @@ export function maxAgeSearch(age: number) {
 
 export function sortByField(uri: string, field: string, state: boolean) {
   let newURI;
-  const idx = uri.search('&sort=');
-  if (state) {
-    if (idx > 0) {
-      newURI = uri.slice(0, idx) + `&sort=${field}:asc`; 
+  const descCheck = uri.includes(`&sort=${field}:desc`);
+  const ascCheck = uri.includes(`&sort=${field}:asc`);
+  if (!state) {
+    if (descCheck) {
+      newURI = uri.replace(`&sort=${field}:desc`, `&sort=${field}:asc`); 
     } else {
       newURI = uri + `&sort=${field}:asc`; 
     }
   } else {
-    if (idx > 0) {
-      newURI = uri.slice(0, idx) + `&sort=${field}:desc`; 
-    } else {
+    if (ascCheck) {
+      newURI = uri.replace(`&sort=${field}:asc`, `&sort=${field}:desc`); 
+    } else { 
       newURI = uri + `&sort=${field}:desc`; 
     }
   }
