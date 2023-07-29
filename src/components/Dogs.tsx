@@ -16,7 +16,6 @@ interface Props {
   onSortName: (arg: any) => void,
   onSortAge: (arg: any) => void,
   onSortBreed: (arg: any) => void,
-  onSortZip: (arg: any) => void,
 }
 
 const displaySize = 10;
@@ -33,7 +32,6 @@ export default function Dogs({
   onSortName,
   onSortAge,
   onSortBreed,
-  onSortZip,
 }: Props) {
   const [toggleMatch, setToggleMatch] = useState(false);
   const [dogMatch, setDogMatch] = useState("");
@@ -44,7 +42,7 @@ export default function Dogs({
 
   useEffect(() => {
     getDogIds(uri);
-  }, [uri, currentPage, toggleMatch, breeds, zipCodes, minAge, maxAge]);
+  }, [uri, currentPage, breeds, zipCodes, minAge, maxAge, toggleMatch]);
 
   function getDogIds(uri: string) {
     fetch(uri, {
@@ -133,7 +131,6 @@ export default function Dogs({
         onSortName={onSortName}
         onSortAge={onSortAge}
         onSortBreed={onSortBreed}
-        onSortZip={onSortZip}
       />
       <Pagination
         className="pagination-bar"

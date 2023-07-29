@@ -41,7 +41,7 @@ export function maxAgeSearch(age: number) {
   return `&ageMax=${age}`;
 }
 
-export function sortByField(uri: string, field: string, state: boolean) {
+export function sortUri(uri: string, field: string, state: boolean) {
   let newURI;
   const descCheck = uri.includes(`&sort=${field}:desc`);
   const ascCheck = uri.includes(`&sort=${field}:asc`);

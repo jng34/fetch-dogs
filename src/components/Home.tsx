@@ -2,7 +2,8 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import Dogs from "./Dogs";
-import { querySearch, baseURI, breedSearch, zipSearch, minAgeSearch, maxAgeSearch, sortByField } from "./queryParams";
+import { querySearch, baseURI, breedSearch, zipSearch, minAgeSearch, maxAgeSearch } from "./queryParams";
+import { sortFunction } from "./sortFunction";
 import { Col, Container, Row } from "react-bootstrap";
 
 export default function Home() {
@@ -16,7 +17,6 @@ export default function Home() {
   const [sortName, setSortName] = useState(false);
   const [sortAge, setSortAge] = useState(false);
   const [sortBreed, setSortBreed] = useState(false);
-  const [sortZip, setSortZip] = useState(false);
   const [uri, setUri] = useState(baseURI);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -24,22 +24,9 @@ export default function Home() {
 
   useEffect(() => {
     getBreeds();
-    // getLocationObjs()
-  }, [breeds, zipCodes, minAge, maxAge, sortName, sortAge, sortBreed, sortZip]);
+  }, [breeds, zipCodes, minAge, maxAge, sortName, sortAge, sortBreed]);
 
   
-  // function getLocationObjs() {
-  //   fetch("https://frontend-take-home-service.fetch.com/locations", {
-  //     method: "POST",
-  //     credentials: "include",
-  //     body: JSON.stringify(zipCodes),
-  //     headers: { "Content-type": "application/json" },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => console.log(data));
-  // }
-  // ///
-
   // Auth check
   function getBreeds() {
     fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
@@ -130,7 +117,6 @@ export default function Home() {
 
   // Min Age
   const handleMinAge = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(uri)
     const prevMin = minAge;
     const newMin = Number(e.target.value);
     setMinAge(newMin);
@@ -152,7 +138,6 @@ export default function Home() {
   const handleMaxAge = (e: ChangeEvent<HTMLInputElement>) => {
     const prevMax = maxAge;
     const newMax = Number(e.target.value);
-    console.log(newMax)
     setMaxAge(newMax);
     let newURI = '';
     if (newMax > 0) {
@@ -218,28 +203,32 @@ export default function Home() {
   });
 
 
-  const handleSortByName = () => {
-    setSortName(!sortName);
-    const queryStr = sortByField(uri, 'name', sortName);
-    setUri(queryStr);
-  }
 
-  const handleSortByAge = () => {
-    setSortAge(!sortAge);
-    const queryStr = sortByField(uri, 'age', sortAge);
-    setUri(queryStr);
-  }
+  // Functions that sort by field
+  // const handleSortByName = () => {
+  //   setSortName(!sortName);
+  //   const sortRegEx = /&sort=.+:(a|de)sc/;
+  //   let queryStr = ''; 
+  //   if (sortRegEx.test(uri)) {
+  //     queryStr = uri.replace(sortRegEx, '&sort=name:asc')
+  //   } else {
+  //     queryStr = sortByField(uri, 'name', sortName);
+  //   }
+  //   setUri(queryStr);
+  // }
+
+  // const handleSortByAge = () => {
+  //   setSortAge(!sortAge);
+  //   const queryStr = sortByField(uri, 'age', sortAge);
+  //   setUri(queryStr);
+  // }
   
-  const handleSortByBreed = () => {
-    setSortBreed(!sortBreed);
-    const queryStr = sortByField(uri, 'breed', sortBreed);
-    setUri(queryStr);
-  }
+  // const handleSortByBreed = () => {
+  //   setSortBreed(!sortBreed);
+  //   const queryStr = sortByField(uri, 'breed', sortBreed);
+  //   setUri(queryStr);
+  // }
 
-  const handleSortByZip = () => {
-    //configure this!
-    setSortZip(!sortZip);
-  }
 
 
   return (
@@ -330,10 +319,9 @@ export default function Home() {
             maxAge={maxAge}
             uri={uri}
             setUri={setUri}
-            onSortName={handleSortByName}
-            onSortAge={handleSortByAge}
-            onSortBreed={handleSortByBreed}
-            onSortZip={handleSortByZip}
+            onSortName={() => sortFunction('name', sortName, setSortName, uri, setUri)}
+            onSortAge={() => sortFunction('age', sortAge, setSortAge, uri, setUri)}
+            onSortBreed={() => sortFunction('breed', sortBreed, setSortBreed, uri, setUri)}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />

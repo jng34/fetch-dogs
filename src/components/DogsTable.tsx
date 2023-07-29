@@ -19,7 +19,6 @@ interface Props {
   onSortName: (arg: any) => void;
   onSortAge: (arg: any) => void;
   onSortBreed: (arg: any) => void;
-  onSortZip: (arg: any) => void;
 }
 
 export default function DogsTable({
@@ -30,7 +29,6 @@ export default function DogsTable({
   onSortName,
   onSortAge,
   onSortBreed,
-  onSortZip
 }: Props) {
   const [toggleModal, setToggleModal] = useState(false);
   const [modalData, setModalData] = useState({
@@ -61,7 +59,8 @@ export default function DogsTable({
             <th onClick={onSortName}>NAME</th>
             <th onClick={onSortAge}>AGE</th>
             <th onClick={onSortBreed}>BREED</th>
-            <th onClick={onSortZip}>ZIP CODE</th>
+            <th
+            >ZIP CODE</th>
           </tr>
         </thead>
         <tbody>
