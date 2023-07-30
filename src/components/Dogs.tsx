@@ -1,22 +1,9 @@
 import { useEffect, useState } from "react";
 import "../index.css";
 import { querySearch } from "./queryParams";
+import { Dog, DogProps } from "./Types";
 import Pagination from "./Pagination";
 import DogsTable from "./DogsTable";
-
-interface Props {
-  breeds: string[],
-  zipCodes: string[],
-  minAge: number,
-  maxAge: number,
-  uri: string,
-  currentPage: number,
-  setUri: (arg: any) => void,
-  setCurrentPage: (arg: any) => void,
-  onSortName: (arg: any) => void,
-  onSortAge: (arg: any) => void,
-  onSortBreed: (arg: any) => void,
-}
 
 const displaySize = 10;
 
@@ -32,13 +19,13 @@ export default function Dogs({
   onSortName,
   onSortAge,
   onSortBreed,
-}: Props) {
-  const [toggleMatch, setToggleMatch] = useState(false);
-  const [dogMatch, setDogMatch] = useState("");
-  const [dogObjs, setDogObjs] = useState([]);
-  const [totalDogs, setTotalDogs] = useState(0);
-  const [prevDogsURI, setPrevDogsURI] = useState("");
-  const [nextDogsURI, setNextDogsURI] = useState("");
+}: DogProps) {
+  const [toggleMatch, setToggleMatch] = useState<boolean>(false);
+  const [dogMatch, setDogMatch] = useState<string>("");
+  const [dogObjs, setDogObjs] = useState<Dog[]>([]);
+  const [totalDogs, setTotalDogs] = useState<number>(0);
+  const [prevDogsURI, setPrevDogsURI] = useState<string>("");
+  const [nextDogsURI, setNextDogsURI] = useState<string>("");
 
   useEffect(() => {
     getDogIds(uri);
@@ -107,10 +94,10 @@ export default function Dogs({
 
   return (
     <div>
-      <div style={{ margin: "20px" }}>
-        <h4 style={{ display: "inline", marginRight: "200px" }}>
+      <div style={{ fontSize: "15px", margin: "20px" }}>
+        <span style={{ display: "inline", marginRight: "200px" }}>
           Total: {totalDogs}
-        </h4>
+        </span>
         Choose a dog or{" "}
         <button id="match" type="button" onClick={handleDogMatch}>
           MATCH ME

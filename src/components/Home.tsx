@@ -1,14 +1,15 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "../index.css";
-import Dogs from "./Dogs";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { querySearch, baseURI, breedSearch, zipSearch, minAgeSearch, maxAgeSearch } from "./queryParams";
 import { sortFunction } from "./sortFunction";
 import { Col, Container, Row } from "react-bootstrap";
+import Dogs from "./Dogs";
 
 export default function Home() {
-  const [dogBreeds, setDogBreeds] = useState<any[]>([]);
-  const [breeds, setBreeds] = useState<any[]>([]);
+  // States //
+  const [dogBreeds, setDogBreeds] = useState<string[]>([]);
+  const [breeds, setBreeds] = useState<string[]>([]);
   const [zip, setZip] = useState<string>("");
   const [zipCodes, setZipCodes] = useState<any[]>([]);
   const [zipError, setZipError] = useState<boolean>(false);
@@ -19,6 +20,7 @@ export default function Home() {
   const [sortBreed, setSortBreed] = useState<boolean>(false);
   const [uri, setUri] = useState<string>(baseURI);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  //////
 
   const navigate = useNavigate();
 
@@ -27,7 +29,7 @@ export default function Home() {
   }, [breeds, zipCodes, minAge, maxAge, sortName, sortAge, sortBreed]);
 
   
-  // Auth check
+  // Auth check //
   function getBreeds() {
     fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
       method: "GET",
@@ -48,9 +50,9 @@ export default function Home() {
       headers: { "Content-type": "application/json" },
     }).then(() => navigate("/"));
   };
+  /////
 
-
-  // Breeds
+  // Breed filters //
   const handleSelectBreed = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedBreed = e.target.value;
     if (selectedBreed === "All") {
@@ -81,9 +83,9 @@ export default function Home() {
       setUri(newURI);
     }
   };
+  /////
 
-
-  // Zip Codes
+  // Zip Code filters //
   const handleZipCode = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -117,8 +119,10 @@ export default function Home() {
       setUri(newURI);
     }
   };
+  /////
 
-  // Min Age
+  // Age filters //
+  // Min Age //
   const handleMinAge = (e: ChangeEvent<HTMLInputElement>) => {
     const prevMin = minAge;
     const newMin = Number(e.target.value);
@@ -135,7 +139,6 @@ export default function Home() {
     }
     setUri(newURI);
   };
-
 
   // Max Age
   const handleMaxAge = (e: ChangeEvent<HTMLInputElement>) => {
@@ -154,9 +157,10 @@ export default function Home() {
     }
     setUri(newURI);
   };
+  /////
 
 
-  // Reset
+  // Reset //
   const onReset = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setBreeds([]);
@@ -167,7 +171,7 @@ export default function Home() {
     setMaxAge(0);
     setUri(baseURI);
   };
-
+  /////
 
   const showBreedFilters = breeds.map((breed: string, idx: number) => {
     return (
@@ -208,14 +212,9 @@ export default function Home() {
 
   return (
     <Container>
-      <header className="header">
-        <h2 style={{ display: "inline" }}>Welcome to Fetch Dogs Adoption!</h2>
-        <button
-          style={{ marginInline: "300px" }}
-          onClick={handleLogOut}
-        >
-          Log Out
-        </button>
+      <header id="header">
+        <h2 onClick={() => navigate('/home')}>Welcome to Fetch Dogs Adoption!</h2>&nbsp;&nbsp;&nbsp;
+        <button onClick={handleLogOut}>Log Out</button>
       </header>
       <Row>
         <Col sm={4}>

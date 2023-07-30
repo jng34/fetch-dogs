@@ -18,8 +18,10 @@ Simply enter your name and email to gain access.
 ### Search
 
 You will be able to customize your search.
-Filter dogs by breeds, zip codes, minimum age, and maximum age.
+-Filter dogs by breeds, zip codes, minimum age, and maximum age
+-Sort dogs in ascending or descending order by breed, name, age
+by clicking on the field headers on the table
 
 ### Match
 
-Get matched with a dog!
+Get matched with a dog by clicking on the 'Match Me' button!

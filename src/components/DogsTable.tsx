@@ -1,25 +1,8 @@
 import { useMemo, useState } from "react";
 import { Image } from "react-bootstrap";
+import { Dog, DogTableProps } from "./Types";
 import DogModal from "./DogModal";
 
-interface Dog {
-  id: string,
-  img: string,
-  name: string,
-  age: number,
-  zip_code: string,
-  breed: string,
-}
-
-interface Props {
-  dogObjs: Dog[];
-  currentPage: number;
-  displaySize: number;
-  toggleMatch: boolean;
-  onSortName: (arg: any) => void;
-  onSortAge: (arg: any) => void;
-  onSortBreed: (arg: any) => void;
-}
 
 export default function DogsTable({
   dogObjs,
@@ -29,9 +12,9 @@ export default function DogsTable({
   onSortName,
   onSortAge,
   onSortBreed,
-}: Props) {
-  const [toggleModal, setToggleModal] = useState(false);
-  const [modalData, setModalData] = useState({
+}: DogTableProps) {
+  const [toggleModal, setToggleModal] = useState<boolean>(false);
+  const [modalData, setModalData] = useState<Dog>({
     id: "",
     img: "",
     name: "",

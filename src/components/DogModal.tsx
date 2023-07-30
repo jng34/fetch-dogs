@@ -1,23 +1,8 @@
 import { Modal, Button, Container, Row, Col, Image } from "react-bootstrap";
+import { DogModalProps } from "./Types";
 
-interface Dog {
-  id: string,
-  img: string,
-  name: string,
-  age: number,
-  zip_code: string,
-  breed: string,
-}
-
-interface Props {
-  dogObj: Dog,
-  toggleModal: boolean,
-  setToggleModal: (arg: any) => void
-}
-
-export default function DogModal({ dogObj, toggleModal, setToggleModal }: Props) {
+export default function DogModal({ dogObj, toggleModal, setToggleModal }: DogModalProps) {
   const { img, name, age, zip_code, breed } = dogObj;
-
   return (
     <Modal show={toggleModal} onHide={() => setToggleModal(false)} centered>
       <Modal.Header closeButton>

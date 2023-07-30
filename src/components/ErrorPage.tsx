@@ -1,18 +1,16 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 
 export default function ErrorPage() {
-  const [countDown, setCountDown] = useState(5);
-
+  const [countDown, setCountDown] = useState<number>(5);
   const setTimer = (): void => {
     setTimeout(() => {
       setCountDown(countDown-1);
     }, 1000)
   }
-  
   setTimer();
-  
+
   if (countDown === 0) return <Navigate to="/home" replace={true} />;
   
   return (
