@@ -59,8 +59,7 @@ export default function DogsTable({
             <th onClick={onSortName}>NAME</th>
             <th onClick={onSortAge}>AGE</th>
             <th onClick={onSortBreed}>BREED</th>
-            <th
-            >ZIP CODE</th>
+            <th>ZIP CODE</th>
           </tr>
         </thead>
         <tbody>

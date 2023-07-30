@@ -7,18 +7,18 @@ import { sortFunction } from "./sortFunction";
 import { Col, Container, Row } from "react-bootstrap";
 
 export default function Home() {
-  const [dogBreeds, setDogBreeds] = useState([]);
-  const [breeds, setBreeds] = useState([]);
-  const [zip, setZip] = useState("");
-  const [zipCodes, setZipCodes] = useState([]);
-  const [zipError, setZipError] = useState(false);
-  const [minAge, setMinAge] = useState(0);
-  const [maxAge, setMaxAge] = useState(0);
-  const [sortName, setSortName] = useState(false);
-  const [sortAge, setSortAge] = useState(false);
-  const [sortBreed, setSortBreed] = useState(false);
-  const [uri, setUri] = useState(baseURI);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [dogBreeds, setDogBreeds] = useState<any[]>([]);
+  const [breeds, setBreeds] = useState<any[]>([]);
+  const [zip, setZip] = useState<string>("");
+  const [zipCodes, setZipCodes] = useState<any[]>([]);
+  const [zipError, setZipError] = useState<boolean>(false);
+  const [minAge, setMinAge] = useState<number>(0);
+  const [maxAge, setMaxAge] = useState<number>(0);
+  const [sortName, setSortName] = useState<boolean>(false);
+  const [sortAge, setSortAge] = useState<boolean>(false);
+  const [sortBreed, setSortBreed] = useState<boolean>(false);
+  const [uri, setUri] = useState<string>(baseURI);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const navigate = useNavigate();
 
@@ -58,9 +58,9 @@ export default function Home() {
       setUri(querySearch([], [], 0, 0));
       return;
     }
-    let breedArr: any = [...breeds, e.target.value];
+    const breedArr: any = [...breeds, e.target.value];
     setBreeds(breedArr);
-    let query = breedSearch(breedArr);
+    const query = breedSearch(breedArr);
     setUri(uri + query);
     setCurrentPage(1);
   };
@@ -92,19 +92,22 @@ export default function Home() {
       (input && input.length > 5) ||
       Number(input) < 1 ||
       Number(input) > 99950
-    )
+    ) {
       return setZipError(true);
-    const zipArr: any = [...zipCodes, input];
-    setZipCodes(zipArr);
-    setZipError(false);
-    let query = zipSearch(zipArr);
-    setUri(uri + query);
+    }
+    if (!zipCodes.includes(input)) {
+      const zipArr: any = [...zipCodes, input];
+      setZipCodes(zipArr);
+      setZipError(false);
+      const query = zipSearch(zipArr);
+      setUri(uri + query);
+    }
   };
 
   const removeZipFilter = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    let removeZip: string | null = e.currentTarget.getAttribute("value");
+    const removeZip: string | null = e.currentTarget.getAttribute("value");
     if (removeZip) {   
       const filteredZips = zipCodes.filter((zip: string) => {
         if (removeZip) return parseInt(zip) !== parseInt(removeZip);
@@ -201,34 +204,6 @@ export default function Home() {
       </div>
     );
   });
-
-
-
-  // Functions that sort by field
-  // const handleSortByName = () => {
-  //   setSortName(!sortName);
-  //   const sortRegEx = /&sort=.+:(a|de)sc/;
-  //   let queryStr = ''; 
-  //   if (sortRegEx.test(uri)) {
-  //     queryStr = uri.replace(sortRegEx, '&sort=name:asc')
-  //   } else {
-  //     queryStr = sortByField(uri, 'name', sortName);
-  //   }
-  //   setUri(queryStr);
-  // }
-
-  // const handleSortByAge = () => {
-  //   setSortAge(!sortAge);
-  //   const queryStr = sortByField(uri, 'age', sortAge);
-  //   setUri(queryStr);
-  // }
-  
-  // const handleSortByBreed = () => {
-  //   setSortBreed(!sortBreed);
-  //   const queryStr = sortByField(uri, 'breed', sortBreed);
-  //   setUri(queryStr);
-  // }
-
 
 
   return (
