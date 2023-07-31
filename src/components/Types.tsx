@@ -42,3 +42,12 @@ export interface FilterProps {
   index: number;
   removeFilterFn: (arg: any) => void;
 }
+
+export interface PageProps {
+  className: string;
+  totalCount: number;
+  currentPage: number;
+  pageSize: number;
+  siblingCount?: number;
+  onPageChange: (arg: number) => void;
+}

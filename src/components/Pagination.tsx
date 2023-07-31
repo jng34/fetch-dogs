@@ -1,15 +1,6 @@
 import classnames from 'classnames';
 import { usePagination, DOTS } from './usePagination';
-import '../index.css';
-
-interface PageProps {
-  className: string,
-  totalCount: number,
-  currentPage: number,
-  pageSize: number,
-  siblingCount?: number,
-  onPageChange: (page: number) => void
-}
+import { PageProps } from './Types';
 
 export default function Pagination(props: PageProps) {
   const {
@@ -79,7 +70,6 @@ export default function Pagination(props: PageProps) {
       <li
         className={classnames('pagination-item', {
           disabled: currentPage === lastPage
-          // disabled: currentPage === lastPage
         })}
         onClick={onNext}
       >

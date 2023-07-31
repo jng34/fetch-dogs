@@ -1,4 +1,3 @@
-import "../index.css";
 import { useEffect, useState } from "react";
 import { querySearch } from "./queryParams";
 import { Dog, DogProps } from "./Types";
@@ -99,8 +98,8 @@ export default function Dogs({
           Total: {totalDogs}
         </span>
         Choose a dog or{" "}
-        <button id="match" type="button" onClick={handleDogMatch}>
-          MATCH ME
+        <button id="matchButton" type="button" onClick={handleDogMatch}>
+          Match Me!
         </button>
       </div>
       <Pagination

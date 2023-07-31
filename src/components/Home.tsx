@@ -1,5 +1,4 @@
-import "../index.css";
-import { ChangeEvent, FormEvent, useEffect, useState, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { querySearch, baseURI, breedSearch, zipSearch, minAgeSearch, maxAgeSearch } from "./queryParams";
 import { sortFunction } from "./sortFunction";
@@ -150,7 +149,7 @@ export default function Home() {
     <Container>
       <header id="header">
         <h2 onClick={() => navigate('/home')}>Welcome to Fetch Dogs Adoption!</h2>&nbsp;&nbsp;&nbsp;
-        <button onClick={handleLogOut}>Log Out</button>
+        <button id="logoutButton" onClick={handleLogOut}>Log Out</button>
       </header>
       <Row>
         <Col sm={4}>
@@ -175,7 +174,7 @@ export default function Home() {
               onChange={(e) => setZip(e.target.value)}
             />
             <button
-              style={{ cursor: "pointer" }}
+              id="setButton"
               type="button"
               value={zip}
               onClick={handleZipCode}
@@ -212,8 +211,8 @@ export default function Home() {
             />
             <br />
             <br />
-            <button id="reset" type="submit">
-              RESET
+            <button id="resetButton" type="submit">
+              Reset
             </button>
           </form>
           <br />
