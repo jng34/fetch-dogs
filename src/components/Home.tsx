@@ -1,10 +1,11 @@
 import "../index.css";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import { querySearch, baseURI, breedSearch, zipSearch, minAgeSearch, maxAgeSearch } from "./queryParams";
 import { sortFunction } from "./sortFunction";
 import { Col, Container, Row } from "react-bootstrap";
 import Dogs from "./Dogs";
+import { Filters, handleAgeFilter } from "./Filters";
 
 export default function Home() {
   // States //
@@ -121,45 +122,6 @@ export default function Home() {
   };
   /////
 
-  // Age filters //
-  // Min Age //
-  const handleMinAge = (e: ChangeEvent<HTMLInputElement>) => {
-    const prevMin = minAge;
-    const newMin = Number(e.target.value);
-    setMinAge(newMin);
-    let newURI = '';
-    if (newMin > 0) {
-      if (uri.includes(minAgeSearch(prevMin))) {
-        newURI = uri.replace(minAgeSearch(prevMin), minAgeSearch(newMin)); 
-      } else {
-        newURI = uri + minAgeSearch(newMin);
-      }
-    } else {
-      newURI = uri.replace(minAgeSearch(prevMin), minAgeSearch(newMin)); 
-    }
-    setUri(newURI);
-  };
-
-  // Max Age
-  const handleMaxAge = (e: ChangeEvent<HTMLInputElement>) => {
-    const prevMax = maxAge;
-    const newMax = Number(e.target.value);
-    setMaxAge(newMax);
-    let newURI = '';
-    if (newMax > 0) {
-      if (uri.includes(maxAgeSearch(prevMax))) {
-        newURI = uri.replace(maxAgeSearch(prevMax), maxAgeSearch(newMax)); 
-      } else {
-        newURI = uri + maxAgeSearch(newMax);
-      }
-    } else {
-      newURI = uri.replace(maxAgeSearch(prevMax), maxAgeSearch(newMax)); 
-    }
-    setUri(newURI);
-  };
-  /////
-
-
   // Reset //
   const onReset = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -174,39 +136,13 @@ export default function Home() {
   /////
 
   const showBreedFilters = breeds.map((breed: string, idx: number) => {
-    return (
-      <div key={idx}>
-        <button
-          type="button"
-          className="deleteButton"
-          value={breed}
-          onClick={(e) => removeBreedFilter(e)}
-        >
-          X
-        </button>
-        &nbsp;
-        <span>{breed}</span>
-      </div>
-    );
+    return <Filters entry={breed} index={idx} removeFilterFn={removeBreedFilter} /> 
   });
 
   const showZipFilters = zipCodes.map((zip: string, idx: number) => {
     let zipStr = zip;
     if (Number(zip) < 10000) zipStr = zip.padStart(5, "0");
-    return (
-      <div key={idx}>
-        <button
-          type="button"
-          className="deleteButton"
-          value={zipStr}
-          onClick={(e) => removeZipFilter(e)}
-        >
-          X
-        </button>
-        &nbsp;
-        <span>{zipStr}</span>
-      </div>
-    );
+    return <Filters entry={zipStr} index={idx} removeFilterFn={removeZipFilter} /> 
   });
 
 
@@ -262,7 +198,7 @@ export default function Home() {
               type="number"
               name="minAge"
               placeholder="min"
-              onChange={handleMinAge}
+              onChange={(e) => handleAgeFilter(e, minAge, setMinAge, uri, setUri, minAgeSearch)}
               min={0}
             />
             <br />
@@ -271,7 +207,7 @@ export default function Home() {
               type="number"
               name="maxAge"
               placeholder="max"
-              onChange={handleMaxAge}
+              onChange={(e) => handleAgeFilter(e, maxAge, setMaxAge, uri, setUri, maxAgeSearch)}
               max={100}
             />
             <br />

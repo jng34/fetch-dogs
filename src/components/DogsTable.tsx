@@ -3,7 +3,6 @@ import { Image } from "react-bootstrap";
 import { Dog, DogTableProps } from "./Types";
 import DogModal from "./DogModal";
 
-
 export default function DogsTable({
   dogObjs,
   currentPage,

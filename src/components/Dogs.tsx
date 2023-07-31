@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import "../index.css";
+import { useEffect, useState } from "react";
 import { querySearch } from "./queryParams";
 import { Dog, DogProps } from "./Types";
 import Pagination from "./Pagination";

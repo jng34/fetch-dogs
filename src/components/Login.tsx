@@ -1,9 +1,8 @@
+import "../index.css";
 import { FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player } from '@lottiefiles/react-lottie-player';
-import "../index.css";
 import { Col, Container, Row } from 'react-bootstrap';
-
 
 export default function Login() {
   const [name, setName] = useState('');
@@ -57,7 +56,6 @@ export default function Login() {
       navigate("/error");  
     }
   }
-
 
   return (
     <Container>

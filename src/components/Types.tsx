@@ -36,3 +36,9 @@ export interface DogModalProps {
   toggleModal: boolean;
   setToggleModal: (arg: any) => void;
 }
+
+export interface FilterProps {
+  entry: string;
+  index: number;
+  removeFilterFn: (arg: any) => void;
+}
