@@ -33,15 +33,15 @@ export default function DogsTable({
   }, [dogObjs, currentPage, toggleMatch]);
 
   return (
-    <div>
-      <table id="dogTable">
+    <div id="table">
+      <table>
         <thead>
-          <tr className="dogTableRow">
-            <th>PIC</th>
-            <th onClick={onSortName}>NAME</th>
-            <th onClick={onSortAge}>AGE</th>
-            <th onClick={onSortBreed}>BREED</th>
-            <th>ZIP CODE</th>
+          <tr className="table-row">
+            <th className="table-col"></th>
+            <th className="table-col" onClick={onSortName}>NAME</th>
+            <th className="table-col" onClick={onSortAge}>AGE</th>
+            <th className="table-col" onClick={onSortBreed}>BREED</th>
+            <th className="table-col">ZIP CODE</th>
           </tr>
         </thead>
         <tbody>
@@ -49,20 +49,20 @@ export default function DogsTable({
             return (
               <tr
                 key={dogObj.id}
-                className="dogTableRow"
+                className="table-row"
                 onClick={() => {
                   setModalData(dogObj);
                   setToggleModal(true);
                 }}
                 >
-                <td>
+                <td style={{ padding: '10px 10px' }}>
                   <Image
                     src={dogObj.img}
                     style={{ width: "5rem", height: "5rem" }}
                     rounded
                   />
                 </td>
-                <td>{dogObj.name}</td>
+                <td >{dogObj.name}</td>
                 <td>{dogObj.age}</td>
                 <td>{dogObj.breed}</td>
                 <td>{dogObj.zip_code}</td>

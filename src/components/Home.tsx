@@ -50,7 +50,6 @@ export default function Home() {
       headers: { "Content-type": "application/json" },
     }).then(() => navigate("/"));
   };
-  /////
 
   // Breed filters //
   const handleSelectBreed = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -83,7 +82,6 @@ export default function Home() {
       setUri(newURI);
     }
   };
-  /////
 
   // Zip Code filters //
   const handleZipCode = (
@@ -119,20 +117,18 @@ export default function Home() {
       setUri(newURI);
     }
   };
-  /////
 
   // Reset //
-  const onReset = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setBreeds([]);
-    setZip("");
-    setZipCodes([]);
-    setZipError(false);
-    setMinAge(0);
-    setMaxAge(0);
-    setUri(baseURI);
+  const onReset = () => {
+    window.location.reload();
+    // setBreeds([]);
+    // setZip("");
+    // setZipCodes([]);
+    // setZipError(false);
+    // setMinAge(0);
+    // setMaxAge(0);
+    // setUri(baseURI);
   };
-  /////
 
   const showBreedFilters = breeds.map((breed: string, idx: number) => {
     return <Filters entry={breed} index={idx} removeFilterFn={removeBreedFilter} /> 
@@ -154,71 +150,76 @@ export default function Home() {
       <Row>
         <Col sm={4}>
           <h4>Search:</h4>
-          <form onSubmit={onReset}>
-            <label>Breed:&nbsp;&nbsp;</label>
-            <select name={"breeds"} onChange={handleSelectBreed}>
-              <option value="All">All</option>
-              {dogBreeds.map((breed, idx) => (
-                <option key={idx} value={breed}>
-                  {breed}
-                </option>
-              ))}
-            </select>
-            <br />
-            <label>Zip Code:&nbsp;&nbsp;</label>
-            <input
-              type="number"
-              name="zipcode"
-              placeholder="zip"
-              value={zip}
-              onChange={(e) => setZip(e.target.value)}
-            />
-            <button
-              id="setButton"
-              type="button"
-              value={zip}
-              onClick={handleZipCode}
-            >
-              Set
-            </button>
-            <br />
-            {zipError ? (
-              <>
-                <span style={{ color: "red" }}>
-                  Please enter a valid zip code
-                </span>
-                <br />
-              </>
-            ) : (
+          <form>
+            <ul className="form-wrapper">
+              <li className="form-row">
+                <label>Breed:&nbsp;&nbsp;</label>
+                <select name={"breeds"} onChange={handleSelectBreed}>
+                  <option value='none' selected disabled hidden>---Select---</option>
+                  {dogBreeds.map((breed, idx) => (
+                    <option key={idx} value={breed}>
+                      {breed}
+                    </option>
+                  ))}
+                </select>
+              </li>            
+              <li className="form-row">
+                <label>Min age:&nbsp;&nbsp;</label>
+                <input
+                  type="number"
+                  name="minAge"
+                  placeholder="min"
+                  onChange={(e) => handleAgeFilter(e, minAge, setMinAge, uri, setUri, minAgeSearch)}
+                  min={0}
+              />
+              </li>            
+              <li className="form-row">
+                <label>Max age:&nbsp;&nbsp;</label>
+                <input
+                  type="number"
+                  name="maxAge"
+                  placeholder="max"
+                  onChange={(e) => handleAgeFilter(e, maxAge, setMaxAge, uri, setUri, maxAgeSearch)}
+                  max={100}
+                />
+              </li>             
+              <li className="form-row">
+              <label>Zip Code:&nbsp;&nbsp;</label>
+                <input
+                  type="number"
+                  name="zipcode"
+                  placeholder="zip"
+                  value={zip}
+                  onChange={(e) => setZip(e.target.value)}
+                /> 
+              </li>
+              {zipError ? (
+                <>
+                  <span style={{ color: "red" }}>
+                    Please enter a valid zip code
+                  </span>
+                  <br />
+                </>
+              ) : (
               <></>
-            )}
-            <label>Min age:&nbsp;&nbsp;</label>
-            <input
-              type="number"
-              name="minAge"
-              placeholder="min"
-              onChange={(e) => handleAgeFilter(e, minAge, setMinAge, uri, setUri, minAgeSearch)}
-              min={0}
-            />
-            <br />
-            <label>Max age:&nbsp;&nbsp;</label>
-            <input
-              type="number"
-              name="maxAge"
-              placeholder="max"
-              onChange={(e) => handleAgeFilter(e, maxAge, setMaxAge, uri, setUri, maxAgeSearch)}
-              max={100}
-            />
-            <br />
-            <br />
-            <button id="resetButton" type="submit">
-              Reset
-            </button>
+              )}
+              <button
+                id="setButton"
+                type="button"
+                value={zip}
+                onClick={handleZipCode}
+              >
+                Set Zip
+              </button>
+            </ul>
           </form>
           <br />
-          <p>Filters</p>
+          <h5>Filters</h5>
           {showBreedFilters}
           {showZipFilters}
+          <button id="resetButton" type="button" onClick={onReset}>
+            Reset
+          </button>
         </Col>
         <Col sm={8}>
           <Dogs

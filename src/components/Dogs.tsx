@@ -3,6 +3,7 @@ import { querySearch } from "./queryParams";
 import { Dog, DogProps } from "./Types";
 import Pagination from "./Pagination";
 import DogsTable from "./DogsTable";
+import MatchModal from "./MatchModal";
 
 const displaySize = 10;
 
@@ -28,7 +29,7 @@ export default function Dogs({
 
   useEffect(() => {
     getDogIds(uri);
-  }, [uri, currentPage, breeds, zipCodes, minAge, maxAge, toggleMatch]);
+  }, [uri, currentPage, breeds, zipCodes, minAge, maxAge]);
 
   function getDogIds(uri: string) {
     fetch(uri, {
@@ -54,9 +55,7 @@ export default function Dogs({
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
-      .then((data) => {
-        setDogObjs(data);
-      });
+      .then((data) => setDogObjs(data))
   }
 
   function getDogMatch(dogIDarr: string[]) {
@@ -67,13 +66,8 @@ export default function Dogs({
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
-      .then((data) => setDogMatch(data.match));
+      .then((data) => setDogMatch(data.match))
   }
-
-  const handleDogMatch = () => {
-    setToggleMatch(true);
-    getDogObjs([dogMatch]);
-  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -92,39 +86,44 @@ export default function Dogs({
   };
 
   return (
-    <div>
-      <div style={{ fontSize: "15px", margin: "20px" }}>
-        <span style={{ display: "inline", marginRight: "200px" }}>
-          Total: {totalDogs}
-        </span>
-        Choose a dog or{" "}
-        <button id="matchButton" type="button" onClick={handleDogMatch}>
-          Match Me!
-        </button>
+    <div style={{ textAlign: 'center' }}>
+      <span style={{ display: "inline-flex", marginRight: "200px" }}>
+        Total: {totalDogs}
+      </span>
+      Choose a dog or{" "}
+      <button id="matchButton" type="button" onClick={() => setToggleMatch(true)}>
+        Match Me!
+      </button>
+      <div>
+        <Pagination
+          className="pagination-bar"
+          totalCount={totalDogs}
+          currentPage={currentPage}
+          pageSize={displaySize}
+          onPageChange={(page: number) => handlePageChange(page)}
+          />
+        <DogsTable
+          dogObjs={dogObjs}
+          currentPage={currentPage}
+          displaySize={displaySize}
+          toggleMatch={toggleMatch}
+          onSortName={onSortName}
+          onSortAge={onSortAge}
+          onSortBreed={onSortBreed}
+          />
+        <Pagination
+          className="pagination-bar"
+          totalCount={totalDogs}
+          currentPage={currentPage}
+          pageSize={displaySize}
+          onPageChange={(page: number) => handlePageChange(page)}
+          />
+        <MatchModal
+          toggleMatch={toggleMatch}
+          setToggleMatch={setToggleMatch}
+          dogMatch={dogMatch}
+        />
       </div>
-      <Pagination
-        className="pagination-bar"
-        totalCount={totalDogs}
-        currentPage={currentPage}
-        pageSize={displaySize}
-        onPageChange={(page: number) => handlePageChange(page)}
-      />
-      <DogsTable
-        dogObjs={dogObjs}
-        currentPage={currentPage}
-        displaySize={displaySize}
-        toggleMatch={toggleMatch}
-        onSortName={onSortName}
-        onSortAge={onSortAge}
-        onSortBreed={onSortBreed}
-      />
-      <Pagination
-        className="pagination-bar"
-        totalCount={totalDogs}
-        currentPage={currentPage}
-        pageSize={displaySize}
-        onPageChange={(page: number) => handlePageChange(page)}
-      />
     </div>
   );
 }

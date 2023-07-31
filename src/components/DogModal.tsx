@@ -6,7 +6,7 @@ export default function DogModal({ dogObj, toggleModal, setToggleModal }: DogMod
   return (
     <Modal show={toggleModal} onHide={() => setToggleModal(false)} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{name}</Modal.Title>
+        <Modal.Title>About Me 🐾 </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Container>
@@ -15,17 +15,12 @@ export default function DogModal({ dogObj, toggleModal, setToggleModal }: DogMod
               <Image src={img} rounded fluid/>
             </Col>
             <Col>
-              <ul>
-                <li>
-                  <b>Breed:</b> {breed}
-                </li>
-                <li>
-                  <b>Age:</b>: {age}
-                </li>
-                <li>
-                  <b>Zip Code:</b> {zip_code}
-                </li>
-              </ul>
+              <p>
+                <b>Name:</b> {name}<br/>
+                <b>Breed:</b> {breed}<br/>
+                <b>Age:</b> {age}<br/>
+                <b>Zip Code:</b> {zip_code}<br/>
+              </p>
             </Col>
           </Row>
         </Container>

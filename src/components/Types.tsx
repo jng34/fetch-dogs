@@ -43,6 +43,12 @@ export interface FilterProps {
   removeFilterFn: (arg: any) => void;
 }
 
+export interface MatchProps {
+  toggleMatch: boolean;
+  dogMatch: string;
+  setToggleMatch: (arg: any) => void;
+}
+
 export interface PageProps {
   className: string;
   totalCount: number;
