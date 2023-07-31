@@ -229,6 +229,9 @@ export default function Home() {
             maxAge={maxAge}
             uri={uri}
             setUri={setUri}
+            sortName={sortName}
+            sortAge={sortAge}
+            sortBreed={sortBreed}
             onSortName={() => sortFunction('name', sortName, setSortName, uri, setUri)}
             onSortAge={() => sortFunction('age', sortAge, setSortAge, uri, setUri)}
             onSortBreed={() => sortFunction('breed', sortBreed, setSortBreed, uri, setUri)}

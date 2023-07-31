@@ -14,6 +14,9 @@ export default function Dogs({
   maxAge,
   uri,
   currentPage,
+  sortName,
+  sortAge,
+  sortBreed,
   setUri,
   setCurrentPage,
   onSortName,
@@ -107,6 +110,9 @@ export default function Dogs({
           currentPage={currentPage}
           displaySize={displaySize}
           toggleMatch={toggleMatch}
+          sortName={sortName}
+          sortAge={sortAge}
+          sortBreed={sortBreed}
           onSortName={onSortName}
           onSortAge={onSortAge}
           onSortBreed={onSortBreed}

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Image } from "react-bootstrap";
 import { Dog, DogTableProps } from "./Types";
+import { upArrow, downArrow } from "./Arrows";
 import DogModal from "./DogModal";
 
 export default function DogsTable({
@@ -8,6 +9,9 @@ export default function DogsTable({
   currentPage,
   displaySize,
   toggleMatch,
+  sortName,
+  sortAge,
+  sortBreed,
   onSortName,
   onSortAge,
   onSortBreed,
@@ -37,10 +41,21 @@ export default function DogsTable({
       <table>
         <thead>
           <tr className="table-row">
-            <th className="table-col"></th>
-            <th className="table-col" onClick={onSortName}>NAME</th>
-            <th className="table-col" onClick={onSortAge}>AGE</th>
-            <th className="table-col" onClick={onSortBreed}>BREED</th>
+            <th className="table-col">🐾</th>
+            <th className="table-col" onClick={onSortName}>
+              NAME
+              {/* <span style={{ display: 'none', opacity: '0.5' }}> */}
+                {sortName ? upArrow : downArrow} 
+              {/* </span> */}
+            </th>
+            <th className="table-col" onClick={onSortAge}>
+              AGE
+              {sortAge ? upArrow : downArrow}
+            </th>
+            <th className="table-col" onClick={onSortBreed}>
+              BREED
+              {sortBreed ? upArrow : downArrow}
+            </th>
             <th className="table-col">ZIP CODE</th>
           </tr>
         </thead>

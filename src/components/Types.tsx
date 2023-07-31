@@ -12,6 +12,9 @@ export interface DogTableProps {
   currentPage: number;
   displaySize: number;
   toggleMatch: boolean;
+  sortName: boolean;
+  sortAge: boolean;
+  sortBreed: boolean;
   onSortName: (arg: any) => void;
   onSortAge: (arg: any) => void;
   onSortBreed: (arg: any) => void;
@@ -24,6 +27,9 @@ export interface DogProps {
   maxAge: number;
   uri: string;
   currentPage: number;
+  sortName: boolean;
+  sortAge: boolean;
+  sortBreed: boolean;
   setUri: (arg: any) => void;
   setCurrentPage: (arg: any) => void;
   onSortName: (arg: any) => void;
