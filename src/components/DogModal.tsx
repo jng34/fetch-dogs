@@ -1,8 +1,11 @@
 import { Modal, Button, Container, Row, Col, Image } from "react-bootstrap";
 import { DogModalProps } from "./Types";
+import { useNavigate } from "react-router-dom";
 
 export default function DogModal({ dogObj, toggleModal, setToggleModal }: DogModalProps) {
-  const { img, name, age, zip_code, breed } = dogObj;
+  const { id, img, name, age, zip_code, breed } = dogObj;
+  const navigate = useNavigate();
+
   return (
     <Modal show={toggleModal} onHide={() => setToggleModal(false)} centered>
       <Modal.Header closeButton>
@@ -29,7 +32,7 @@ export default function DogModal({ dogObj, toggleModal, setToggleModal }: DogMod
         <Button variant="secondary" onClick={() => setToggleModal(false)}>
           Close
         </Button>
-        <Button variant="primary" onClick={() => console.log('selected')}>
+        <Button variant="primary" onClick={() => navigate('/adoption', { state: { dogMatch: id }})}>
           Adopt
         </Button>
       </Modal.Footer>

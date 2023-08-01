@@ -54,13 +54,8 @@ export default function Home() {
   // Breed filters //
   const handleSelectBreed = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedBreed = e.target.value;
-    if (selectedBreed === "All") {
-      setBreeds([]);
-      setUri(querySearch([], [], 0, 0));
-      return;
-    }
-    if (!breeds.includes(selectedBreed)) {
-      const breedArr: any = [...breeds, e.target.value];
+    if (selectedBreed !== 'none' && !breeds.includes(selectedBreed)) {
+      const breedArr: any = [...breeds, selectedBreed];
       setBreeds(breedArr);
       const query = breedSearch(breedArr);
       setUri(uri + query);
@@ -121,21 +116,12 @@ export default function Home() {
   };
 
   // Reset //
-  const onReset = () => {
-    window.location.reload();
-    // setBreeds([]);
-    // setZip("");
-    // setZipCodes([]);
-    // setZipError(false);
-    // setMinAge(0);
-    // setMaxAge(0);
-    // setUri(baseURI);
-  };
-
+  const onReset = () => window.location.reload();
+  
   const showBreedFilters = breeds.map((breed: string, idx: number) => {
     return <Filters entry={breed} index={idx} removeFilterFn={removeBreedFilter} /> 
   });
-
+  
   const showZipFilters = zipCodes.map((zip: string, idx: number) => {
     let zipStr = zip;
     if (Number(zip) < 10000) zipStr = zip.padStart(5, "0");
@@ -157,7 +143,7 @@ export default function Home() {
               <li className="form-row">
                 <label>Breed:&nbsp;&nbsp;</label>
                 <select name={"breeds"} onChange={handleSelectBreed}>
-                  <option value='none' selected disabled hidden>---Select---</option>
+                  <option value='none'>---Select---</option>
                   {dogBreeds.map((breed, idx) => (
                     <option key={idx} value={breed}>
                       {breed}

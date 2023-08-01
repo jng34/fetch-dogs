@@ -79,13 +79,13 @@ export default function Dogs({
     if (searchIndex >= 100 && searchIndex % 100 === 0) {
       return setUri(
         querySearch(breeds, zipCodes, minAge, maxAge, nextDogsURI)
-      );
-    }
+      )
+    };
     if (searchIndex < 100 && searchIndex % 100 === 0) {
       return setUri(
         querySearch(breeds, zipCodes, minAge, maxAge, "", prevDogsURI)
-      );
-    }
+      )
+    };
   };
 
   return (
@@ -104,7 +104,7 @@ export default function Dogs({
           currentPage={currentPage}
           pageSize={displaySize}
           onPageChange={(page: number) => handlePageChange(page)}
-          />
+        />
         <DogsTable
           dogObjs={dogObjs}
           currentPage={currentPage}
@@ -116,14 +116,14 @@ export default function Dogs({
           onSortName={onSortName}
           onSortAge={onSortAge}
           onSortBreed={onSortBreed}
-          />
+        />
         <Pagination
           className="pagination-bar"
           totalCount={totalDogs}
           currentPage={currentPage}
           pageSize={displaySize}
           onPageChange={(page: number) => handlePageChange(page)}
-          />
+        />
         <MatchModal
           toggleMatch={toggleMatch}
           setToggleMatch={setToggleMatch}

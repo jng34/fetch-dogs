@@ -16,7 +16,7 @@ export default function MatchModal({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={() => setToggleMatch(false)}>Close</Button>
-        <Button variant="primary" onClick={() => navigate("/adoptions", { state: { dogMatch } })}>See Match</Button>
+        <Button variant="primary" onClick={() => navigate("/adoption", { state: { dogMatch } })}>See Match</Button>
       </Modal.Footer>
     </Modal>
   )
