@@ -59,11 +59,13 @@ export default function Home() {
       setUri(querySearch([], [], 0, 0));
       return;
     }
-    const breedArr: any = [...breeds, e.target.value];
-    setBreeds(breedArr);
-    const query = breedSearch(breedArr);
-    setUri(uri + query);
-    setCurrentPage(1);
+    if (!breeds.includes(selectedBreed)) {
+      const breedArr: any = [...breeds, e.target.value];
+      setBreeds(breedArr);
+      const query = breedSearch(breedArr);
+      setUri(uri + query);
+      setCurrentPage(1);
+    }
   };
 
   const removeBreedFilter = (
