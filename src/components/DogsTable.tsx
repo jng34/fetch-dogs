@@ -42,19 +42,14 @@ export default function DogsTable({
         <thead>
           <tr className="table-row">
             <th className="table-col">🐾</th>
-            <th className="table-col" onClick={onSortName}>
+            <th id="field" className="table-col" onClick={onSortName}>
               NAME
-              {/* <span style={{ display: 'none', opacity: '0.5' }}> */}
-                {sortName ? upArrow : downArrow} 
-              {/* </span> */}
             </th>
-            <th className="table-col" onClick={onSortAge}>
+            <th id="field" className="table-col" onClick={onSortAge}>
               AGE
-              {sortAge ? upArrow : downArrow}
             </th>
-            <th className="table-col" onClick={onSortBreed}>
+            <th id="field" className="table-col" onClick={onSortBreed}>
               BREED
-              {sortBreed ? upArrow : downArrow}
             </th>
             <th className="table-col">ZIP CODE</th>
           </tr>

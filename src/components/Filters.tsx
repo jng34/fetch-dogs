@@ -30,6 +30,7 @@ export const handleAgeFilter = (
 ) => {
   const prevAge = ageState;
   const newAge = Number(e.target.value);
+  console.log(newAge)
   setAgeState(newAge);
   let newURI = '';
   if (newAge > 0) {
@@ -39,7 +40,7 @@ export const handleAgeFilter = (
       newURI = uri + searchAgeUri(newAge);
     }
   } else {
-    newURI = uri.replace(searchAgeUri(prevAge), searchAgeUri(newAge)); 
+    newURI = uri.replace(searchAgeUri(prevAge), ''); 
   }
   setUri(newURI);
 };

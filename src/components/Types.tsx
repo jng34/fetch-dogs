@@ -7,19 +7,6 @@ export interface Dog {
   breed: string;
 }
 
-export interface DogTableProps {
-  dogObjs: Dog[];
-  currentPage: number;
-  displaySize: number;
-  toggleMatch: boolean;
-  sortName: boolean;
-  sortAge: boolean;
-  sortBreed: boolean;
-  onSortName: (arg: any) => void;
-  onSortAge: (arg: any) => void;
-  onSortBreed: (arg: any) => void;
-}
-
 export interface DogProps {
   breeds: string[];
   zipCodes: string[];
@@ -32,6 +19,19 @@ export interface DogProps {
   sortBreed: boolean;
   setUri: (arg: any) => void;
   setCurrentPage: (arg: any) => void;
+  onSortName: (arg: any) => void;
+  onSortAge: (arg: any) => void;
+  onSortBreed: (arg: any) => void;
+}
+
+export interface DogTableProps {
+  dogObjs: Dog[];
+  currentPage: number;
+  displaySize: number;
+  toggleMatch: boolean;
+  sortName: boolean;
+  sortAge: boolean;
+  sortBreed: boolean;
   onSortName: (arg: any) => void;
   onSortAge: (arg: any) => void;
   onSortBreed: (arg: any) => void;
