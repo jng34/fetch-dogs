@@ -46,7 +46,7 @@ export default function Home() {
       headers: { "Content-type": "application/json" },
     }).then(() => navigate("/"));
   };
-  
+
   
   function removeBreedFilter(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const removeBreed = e.currentTarget.getAttribute("value");

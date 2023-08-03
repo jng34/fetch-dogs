@@ -21,6 +21,7 @@ You will be able to customize your search. <br/>
 -Filter dogs by breeds, zip codes, minimum age, and maximum age <br/>
 -Sort dogs in ascending or descending order by breed, name, age
 by clicking on the field headers on the table
+-Choose a dog to adopt
 
 ### Match
 
