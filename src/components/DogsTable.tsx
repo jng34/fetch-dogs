@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { Image } from "react-bootstrap";
 import { Dog, DogTableProps } from "./Types";
-import { upArrow, downArrow } from "./Arrows";
 import DogModal from "./DogModal";
 
 export default function DogsTable({
@@ -9,9 +8,6 @@ export default function DogsTable({
   currentPage,
   displaySize,
   toggleMatch,
-  sortName,
-  sortAge,
-  sortBreed,
   onSortName,
   onSortAge,
   onSortBreed,

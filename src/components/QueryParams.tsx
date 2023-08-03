@@ -2,7 +2,7 @@ export const baseURI = 'https://frontend-take-home-service.fetch.com/dogs/search
 
 export function querySearch(
   breeds: string[],
-  zipCodes: string[],
+  zipCode: string | null,
   minAge: number,
   maxAge: number,
   nextEndPt?: string,
@@ -10,7 +10,8 @@ export function querySearch(
   defaultEndPt: string = '/dogs/search?size=100&',
 ) {
   let newURI = `https://frontend-take-home-service.fetch.com${nextEndPt || prevEndPt || defaultEndPt}`;
-  newURI += breedSearch(breeds) + zipSearch(zipCodes);
+  newURI += breedSearch(breeds);
+  if (zipCode) newURI += zipSearch(zipCode);
   if (minAge > 0) newURI += minAgeSearch(minAge);
   if (maxAge > 0) newURI += maxAgeSearch(maxAge);
   return newURI;
@@ -25,21 +26,21 @@ export function breedSearch(breeds: string[]) {
   return queryStr;
 }
 
-export function zipSearch(zips: string[]) {
-  let queryStr = '';
-  zips.forEach((breed: string) => {
-    queryStr = '&zipCodes=' + encodeURIComponent(breed);
-  });
-  return queryStr;
+
+export function zipSearch(zip: string) {
+  return '&zipCodes=' + encodeURIComponent(zip);
 }
+
 
 export function minAgeSearch(age: number) {
   return `&ageMin=${age}`;
 }
 
+
 export function maxAgeSearch(age: number) {
   return `&ageMax=${age}`;
 }
+
 
 export function sortUri(uri: string, field: string, state: boolean) {
   let newURI;

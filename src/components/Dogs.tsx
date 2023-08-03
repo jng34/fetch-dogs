@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { querySearch } from "./queryParams";
+import { querySearch } from "./QueryParams";
 import { Dog, DogProps } from "./Types";
 import Pagination from "./Pagination";
 import DogsTable from "./DogsTable";
@@ -9,7 +9,7 @@ const displaySize = 10;
 
 export default function Dogs({
   breeds,
-  zipCodes,
+  zipCode,
   minAge,
   maxAge,
   uri,
@@ -32,7 +32,7 @@ export default function Dogs({
 
   useEffect(() => {
     getDogIds(uri);
-  }, [uri, currentPage, breeds, zipCodes, minAge, maxAge]);
+  }, [uri, currentPage, breeds, zipCode, minAge, maxAge]);
 
   function getDogIds(uri: string) {
     fetch(uri, {
@@ -70,6 +70,7 @@ export default function Dogs({
     })
       .then((res) => res.json())
       .then((data) => setDogMatch(data.match))
+      .catch(err => console.log(err))
   }
 
   const handlePageChange = (page: number) => {
@@ -78,12 +79,12 @@ export default function Dogs({
     const searchIndex = (page - 1) * displaySize;
     if (searchIndex >= 100 && searchIndex % 100 === 0) {
       return setUri(
-        querySearch(breeds, zipCodes, minAge, maxAge, nextDogsURI)
+        querySearch(breeds, zipCode, minAge, maxAge, nextDogsURI)
       )
     };
     if (searchIndex < 100 && searchIndex % 100 === 0) {
       return setUri(
-        querySearch(breeds, zipCodes, minAge, maxAge, "", prevDogsURI)
+        querySearch(breeds, zipCode, minAge, maxAge, "", prevDogsURI)
       )
     };
   };

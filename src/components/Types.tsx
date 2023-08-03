@@ -9,7 +9,8 @@ export interface Dog {
 
 export interface DogProps {
   breeds: string[];
-  zipCodes: string[];
+  zipCode: string | null;
+  // zipCodes: string[];
   minAge: number;
   maxAge: number;
   uri: string;
@@ -46,7 +47,7 @@ export interface DogModalProps {
 export interface FilterProps {
   entry: string;
   index: number;
-  removeFilterFn: (arg: any) => void;
+  removeBreedFilter: (arg: any) => void;
 }
 
 export interface MatchProps {

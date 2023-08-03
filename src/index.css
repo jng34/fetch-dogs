@@ -57,29 +57,11 @@ input {
   width: 70%;
 }
 
-#table {
-  table-layout: fixed;
-  width: auto;
-  justify-content: center;
-  display: flex;
-}
-
-.table-row {
-  border: 1px solid black;
-  overflow: hidden;
-  text-align: center;
-}
-
 #field:hover {
   cursor: pointer;
   transition: 0.3s;
   opacity: 0.5;
   font-weight: bolder;
-}
-
-.table-col {
-  margin: 5px 15px;
-  padding: 5px 40px;
 }
 
 .deleteButton {
@@ -93,7 +75,6 @@ input {
     color: white;
   }
 }
-
 
 .pageLayout {
   align-content: center;
@@ -187,7 +168,6 @@ input {
   cursor: pointer;
 }
 
-
 #logoutButton:hover, #setButton:hover {
   background-color: grey;
   color: white;
@@ -230,6 +210,7 @@ input {
 .form-row > select {
   flex: 1;
 }
+
 .form-row > input {
   flex: 1;
 }
@@ -252,4 +233,23 @@ input {
   height: 20em;
   margin-bottom: 20px;
   border-radius: 5px;
+}
+
+#table {
+  margin: 10px 0;
+  table-layout: fixed;
+  width: auto;
+  justify-content: center;
+  display: flex;
+}
+
+.table-row {
+  border: 1px solid black;
+  overflow: hidden;
+  text-align: center;
+}
+
+.table-col {
+  margin: 5px 15px;
+  padding: 5px 40px;
 }

@@ -1,18 +1,16 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { querySearch, baseURI, breedSearch, zipSearch, minAgeSearch, maxAgeSearch } from "./queryParams";
-import { sortFunction } from "./sortFunction";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { querySearch, baseURI, minAgeSearch, maxAgeSearch } from "./QueryParams";
+import { sortFunction } from "./Sort";
+import { Filters, ageFilter, breedFilter, zipCodeFilter } from "./Filters";
 import Dogs from "./Dogs";
-import { Filters, handleAgeFilter } from "./Filters";
 
 export default function Home() {
-  // States //
+  // States 
   const [dogBreeds, setDogBreeds] = useState<string[]>([]);
   const [breeds, setBreeds] = useState<string[]>([]);
-  const [zip, setZip] = useState<string>("");
-  const [zipCodes, setZipCodes] = useState<any[]>([]);
-  const [zipError, setZipError] = useState<boolean>(false);
+  const [zipCode, setZipCode] = useState<string>("");
   const [minAge, setMinAge] = useState<number>(0);
   const [maxAge, setMaxAge] = useState<number>(0);
   const [sortName, setSortName] = useState<boolean>(false);
@@ -20,16 +18,13 @@ export default function Home() {
   const [sortBreed, setSortBreed] = useState<boolean>(false);
   const [uri, setUri] = useState<string>(baseURI);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  //////
 
+  // Navigation
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getBreeds();
-  }, [breeds, zipCodes, minAge, maxAge, sortName, sortAge, sortBreed]);
-
+  useEffect(getBreeds, []);
   
-  // Auth check //
+  // Auth check 
   function getBreeds() {
     fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
       method: "GET",
@@ -43,26 +38,19 @@ export default function Home() {
       .then((data) => setDogBreeds(data));
   }
 
-  const handleLogOut = () => {
+  // Log out 
+  function handleLogOut() {
     fetch("https://frontend-take-home-service.fetch.com/auth/logout", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
     }).then(() => navigate("/"));
   };
-
-  // Breed filters //
-  const handleSelectBreed = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedBreed = e.target.value;
-    if (selectedBreed !== 'none' && !breeds.includes(selectedBreed)) {
-      const breedArr: any = [...breeds, selectedBreed];
-      setBreeds(breedArr);
-      const query = breedSearch(breedArr);
-      setUri(uri + query);
-      setCurrentPage(1);
-    }
-  };
-
+  
+  const showBreedFilters = breeds.map((breed: string, idx: number) => {
+    return <Filters entry={breed} index={idx} removeBreedFilter={removeBreedFilter} /> 
+  });
+  
   const removeBreedFilter = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -72,7 +60,7 @@ export default function Home() {
     );
     setBreeds(filteredBreeds);
     if (filteredBreeds.length === 0) {
-      return setUri(querySearch(filteredBreeds, zipCodes, minAge, maxAge));
+      return setUri(querySearch(filteredBreeds, zipCode, minAge, maxAge));
     }
     if (removeBreed) {
       let newURI = uri.replace(`&breeds=${encodeURIComponent(removeBreed)}`, '');
@@ -80,54 +68,8 @@ export default function Home() {
     }
   };
 
-  // Zip Code filters //
-  const handleZipCode = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    const input: string | null = e.currentTarget.getAttribute("value");
-    if (
-      (input && input.length > 5) ||
-      Number(input) < 1 ||
-      Number(input) > 99950
-    ) {
-      return setZipError(true);
-    }
-    if (!zipCodes.includes(input)) {
-      const zipArr: any = [...zipCodes, input];
-      setZipCodes(zipArr);
-      setZipError(false);
-      const query = zipSearch(zipArr);
-      setUri(uri + query);
-    }
-  };
-
-  const removeZipFilter = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    const removeZip: string | null = e.currentTarget.getAttribute("value");
-    if (removeZip) {   
-      const filteredZips = zipCodes.filter((zip: string) => {
-        if (removeZip) return parseInt(zip) !== parseInt(removeZip);
-      });
-      setZipCodes(filteredZips);
-      let newURI = uri.replace(`&zipCodes=${encodeURIComponent(removeZip)}`, '');
-      setUri(newURI);
-    }
-  };
-
-  // Reset //
+  // Reset 
   const onReset = () => window.location.reload();
-  
-  const showBreedFilters = breeds.map((breed: string, idx: number) => {
-    return <Filters entry={breed} index={idx} removeFilterFn={removeBreedFilter} /> 
-  });
-  
-  const showZipFilters = zipCodes.map((zip: string, idx: number) => {
-    let zipStr = zip;
-    if (Number(zip) < 10000) zipStr = zip.padStart(5, "0");
-    return <Filters entry={zipStr} index={idx} removeFilterFn={removeZipFilter} /> 
-  });
-
 
   return (
     <Container>
@@ -142,7 +84,7 @@ export default function Home() {
             <ul className="form-wrapper">
               <li className="form-row">
                 <label>Breed:&nbsp;&nbsp;</label>
-                <select name={"breeds"} onChange={handleSelectBreed}>
+                <select name={"breeds"} onChange={(e) => breedFilter(e.target.value, breeds, setBreeds, uri, setUri, setCurrentPage)}>
                   <option value='none'>---Select---</option>
                   {dogBreeds.map((breed, idx) => (
                     <option key={idx} value={breed}>
@@ -157,7 +99,7 @@ export default function Home() {
                   type="number"
                   name="minAge"
                   placeholder="min"
-                  onChange={(e) => handleAgeFilter(e, minAge, setMinAge, uri, setUri, minAgeSearch)}
+                  onChange={(e) => ageFilter(e.target.value, minAge, setMinAge, uri, setUri, minAgeSearch)}
                   min={0}
               />
               </li>            
@@ -167,7 +109,7 @@ export default function Home() {
                   type="number"
                   name="maxAge"
                   placeholder="max"
-                  onChange={(e) => handleAgeFilter(e, maxAge, setMaxAge, uri, setUri, maxAgeSearch)}
+                  onChange={(e) => ageFilter(e.target.value, maxAge, setMaxAge, uri, setUri, maxAgeSearch)}
                   max={100}
                 />
               </li>             
@@ -175,36 +117,17 @@ export default function Home() {
               <label>Zip Code:&nbsp;&nbsp;</label>
                 <input
                   type="number"
-                  name="zipcode"
+                  name="zip-code"
                   placeholder="zip"
-                  value={zip}
-                  onChange={(e) => setZip(e.target.value)}
+                  value={zipCode}
+                  onChange={(e) => zipCodeFilter(e.target.value, setZipCode, uri, setUri)}
                 /> 
               </li>
-              {zipError ? (
-                <>
-                  <span style={{ color: "red" }}>
-                    Please enter a valid zip code
-                  </span>
-                  <br />
-                </>
-              ) : (
-              <></>
-              )}
-              <button
-                id="setButton"
-                type="button"
-                value={zip}
-                onClick={handleZipCode}
-              >
-                Set Zip
-              </button>
             </ul>
           </form>
           <br />
           <h5>Filters</h5>
           {showBreedFilters}
-          {showZipFilters}
           <button id="resetButton" type="button" onClick={onReset}>
             Reset
           </button>
@@ -212,7 +135,7 @@ export default function Home() {
         <Col sm={8}>
           <Dogs
             breeds={breeds}
-            zipCodes={zipCodes}
+            zipCode={zipCode}
             minAge={minAge}
             maxAge={maxAge}
             uri={uri}
