@@ -47,27 +47,26 @@ export default function Home() {
     }).then(() => navigate("/"));
   };
   
-  const showBreedFilters = breeds.map((breed: string, idx: number) => {
-    return <Filters entry={breed} index={idx} removeBreedFilter={removeBreedFilter} /> 
-  });
   
-  const removeBreedFilter = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  function removeBreedFilter(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const removeBreed = e.currentTarget.getAttribute("value");
     const filteredBreeds = breeds.filter(
       (breed: string) => breed !== removeBreed
-    );
-    setBreeds(filteredBreeds);
-    if (filteredBreeds.length === 0) {
-      return setUri(querySearch(filteredBreeds, zipCode, minAge, maxAge));
-    }
-    if (removeBreed) {
-      let newURI = uri.replace(`&breeds=${encodeURIComponent(removeBreed)}`, '');
-      setUri(newURI);
-    }
-  };
-
+      );
+      setBreeds(filteredBreeds);
+      if (filteredBreeds.length === 0) {
+        return setUri(querySearch(filteredBreeds, zipCode, minAge, maxAge));
+      }
+      if (removeBreed) {
+        let newURI = uri.replace(`&breeds=${encodeURIComponent(removeBreed)}`, '');
+        setUri(newURI);
+      }
+    };
+  
+  const showBreedFilters = breeds.map((breed: string, idx: number) => {
+    return <Filters entry={breed} index={idx} removeBreedFilter={removeBreedFilter} /> 
+  });
+    
   // Reset 
   const onReset = () => window.location.reload();
 
