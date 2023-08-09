@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Dog } from "./Types";
+import { Dog } from "../types/Types";
 import DogCard from "./DogCard";
 
 export default function AdoptionPage() {  

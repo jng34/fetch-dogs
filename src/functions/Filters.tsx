@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { FilterProps } from "./Types";
+import { FilterProps } from "../types/Types";
 import { breedSearch, zipSearch } from "./QueryParams";
 
 // Render filters component

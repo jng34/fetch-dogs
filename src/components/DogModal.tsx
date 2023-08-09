@@ -1,5 +1,5 @@
 import { Modal, Button, Container, Row, Col, Image } from "react-bootstrap";
-import { DogModalProps } from "./Types";
+import { DogModalProps } from "../types/Types";
 import { useNavigate } from "react-router-dom";
 
 export default function DogModal({ dogObj, toggleModal, setToggleModal }: DogModalProps) {

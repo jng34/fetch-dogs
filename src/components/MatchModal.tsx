@@ -1,6 +1,6 @@
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { MatchProps } from "./Types";
+import { MatchProps } from "../types/Types";
 
 export default function MatchModal({
   toggleMatch, setToggleMatch, dogMatch

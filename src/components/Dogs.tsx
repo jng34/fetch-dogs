@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { querySearch } from "./QueryParams";
-import { Dog, DogProps } from "./Types";
+import { querySearch } from "../functions/QueryParams";
+import { Dog, DogProps } from "../types/Types";
+import { displaySize } from "../constants/Constants";
 import Pagination from "./Pagination";
 import DogsTable from "./DogsTable";
 import MatchModal from "./MatchModal";
 
-const displaySize = 10;
 
 export default function Dogs({
   breeds,
@@ -98,6 +98,7 @@ export default function Dogs({
       <button id="matchButton" type="button" onClick={() => setToggleMatch(true)}>
         Match Me!
       </button>
+      
       <div>
         <Pagination
           className="pagination-bar"

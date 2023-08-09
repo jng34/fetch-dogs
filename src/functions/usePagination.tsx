@@ -1,13 +1,6 @@
 import { useMemo } from "react";
-
-interface Pagination {
-  totalCount: number,
-  pageSize: number,
-  siblingCount: number,
-  currentPage: number
-}
-
-export const DOTS = '...';
+import { Pagination } from "../types/Types";
+import { DOTS } from "../constants/Constants";
 
 export function range(start: number, end: number) {
   let length = end - start + 1;

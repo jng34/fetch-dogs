@@ -10,7 +10,6 @@ export interface Dog {
 export interface DogProps {
   breeds: string[];
   zipCode: string | null;
-  // zipCodes: string[];
   minAge: number;
   maxAge: number;
   uri: string;
@@ -63,4 +62,11 @@ export interface PageProps {
   pageSize: number;
   siblingCount?: number;
   onPageChange: (arg: number) => void;
+}
+
+export interface Pagination {
+  totalCount: number,
+  pageSize: number,
+  siblingCount: number,
+  currentPage: number
 }

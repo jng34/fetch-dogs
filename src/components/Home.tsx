@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { querySearch, baseURI, minAgeSearch, maxAgeSearch } from "./QueryParams";
-import { sortFunction } from "./Sort";
-import { Filters, ageFilter, breedFilter, zipCodeFilter } from "./Filters";
+import { querySearch, minAgeSearch, maxAgeSearch } from "../functions/QueryParams";
+import { baseURI } from "../constants/Constants";
+import { sortFunction } from "../functions/Sort";
+import { Filters, ageFilter, breedFilter, zipCodeFilter } from "../functions/Filters";
 import Dogs from "./Dogs";
 
 export default function Home() {
@@ -82,7 +83,7 @@ export default function Home() {
           <form>
             <ul className="form-wrapper">
               <li className="form-row">
-                <label>Breed:&nbsp;&nbsp;</label>
+                <label htmlFor="breed">Breed:&nbsp;&nbsp;</label>
                 <select name={"breeds"} onChange={(e) => breedFilter(e.target.value, breeds, setBreeds, uri, setUri, setCurrentPage)}>
                   <option value='none'>---Select---</option>
                   {dogBreeds.map((breed, idx) => (
@@ -93,7 +94,7 @@ export default function Home() {
                 </select>
               </li>            
               <li className="form-row">
-                <label>Min age:&nbsp;&nbsp;</label>
+                <label htmlFor="min-age">Min age:&nbsp;&nbsp;</label>
                 <input
                   type="number"
                   name="minAge"
@@ -103,7 +104,7 @@ export default function Home() {
               />
               </li>            
               <li className="form-row">
-                <label>Max age:&nbsp;&nbsp;</label>
+                <label htmlFor="max-age">Max age:&nbsp;&nbsp;</label>
                 <input
                   type="number"
                   name="maxAge"
@@ -113,7 +114,7 @@ export default function Home() {
                 />
               </li>             
               <li className="form-row">
-              <label>Zip Code:&nbsp;&nbsp;</label>
+              <label htmlFor="zip-code">Zip Code:&nbsp;&nbsp;</label>
                 <input
                   type="number"
                   name="zip-code"

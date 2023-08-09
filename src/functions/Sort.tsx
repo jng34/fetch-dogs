@@ -13,7 +13,7 @@
     setState(!state);
     let queryStr = ''; 
     if (sortRegEx.test(uri)) {
-      if (state) {
+      if (!state) {
         queryStr = uri.replace(sortRegEx, `&sort=${field}:desc`)
       } else {
         queryStr = uri.replace(sortRegEx, `&sort=${field}:asc`)

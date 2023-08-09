@@ -1,5 +1,3 @@
-export const baseURI = 'https://frontend-take-home-service.fetch.com/dogs/search?size=100';
-
 export function querySearch(
   breeds: string[],
   zipCode: string | null,
