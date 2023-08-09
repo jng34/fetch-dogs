@@ -10,12 +10,8 @@ export default function DogCard({ adoptedDog }: any) {
       <br/>
       <div className="match-card" >
         <img src={img} alt="dogPic" className="match-img"/><br/>
-        <p style={{ textAlign: 'center', alignContent: 'center' }}>
-          <span style={{ fontSize: '25px', fontWeight: 'bold' }}>{name}</span><br/>
-          <span style={{ fontSize: '20px', fontStyle: 'italic' }}>
-            {breed}, {age} yrs, {zip_code}
-          </span>
-        </p>
+        <h4>{name}</h4>
+        <p>{breed}, {age} yrs, {zip_code}</p>
       </div>
       <br/>
       <button id="back" type="button" onClick={() => navigate("/home")}>Back to Search</button>

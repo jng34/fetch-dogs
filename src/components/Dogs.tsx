@@ -92,9 +92,9 @@ export default function Dogs({
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <span style={{ display: "inline-flex", marginRight: "200px" }}>
+      <h6 style={{ display: "inline-flex", marginRight: "200px" }}>
         Total: {totalDogs}
-      </span>
+      </h6>
       Choose a dog or{" "}
       <button id="matchButton" type="button" onClick={() => setToggleMatch(true)}>
         Match Me!
