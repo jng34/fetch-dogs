@@ -17,7 +17,7 @@ export default function Home() {
   const [sortName, setSortName] = useState<boolean>(false);
   const [sortAge, setSortAge] = useState<boolean>(false);
   const [sortBreed, setSortBreed] = useState<boolean>(false);
-  const [uri, setUri] = useState<string>(baseURI);
+  const [uri, setUri] = useState<string>(`${baseURI}/dogs/search?size=100&sort=breed:asc`);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   // Navigation
@@ -27,7 +27,7 @@ export default function Home() {
   
   // Auth check 
   function getBreeds() {
-    fetch("https://frontend-take-home-service.fetch.com/dogs/breeds", {
+    fetch(`${baseURI}/dogs/breeds`, {
       method: "GET",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -41,7 +41,7 @@ export default function Home() {
 
   // Log out 
   function handleLogOut() {
-    fetch("https://frontend-take-home-service.fetch.com/auth/logout", {
+    fetch(`${baseURI}/auth/logout`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },

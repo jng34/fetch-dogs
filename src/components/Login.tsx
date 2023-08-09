@@ -1,7 +1,9 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { baseURI } from '../constants/Constants';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { Col, Container, Row } from 'react-bootstrap';
+import { emailCheck } from '../constants/Constants';
 
 export default function Login() {
   const [name, setName] = useState('');
@@ -15,7 +17,7 @@ export default function Login() {
   useEffect(() => {
     const checkForAuth = async () => {
       const data = await fetch(
-        "https://frontend-take-home-service.fetch.com/dogs/breeds",
+        `${baseURI}/dogs/breeds`,
         {
           method: "GET",
           credentials: "include",
@@ -28,9 +30,6 @@ export default function Login() {
     },[]);
     
 
-  // RegEx for checking valid email  
-  const emailCheck = /.+\@.+\.[a-zA-Z]{2,}/;
-
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setNameErr('');
@@ -38,7 +37,7 @@ export default function Login() {
     setBadEmailErr('');
     //Authenticate user
     try {
-      const auth = await fetch('https://frontend-take-home-service.fetch.com/auth/login', {
+      const auth = await fetch(`${baseURI}/auth/login`, {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({ name, email }),

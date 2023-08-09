@@ -15,7 +15,7 @@ export default function DogModal({ dogObj, toggleModal, setToggleModal }: DogMod
         <Container>
           <Row>
             <Col>
-              <Image src={img} rounded fluid/>
+              <Image src={img} alt="matched dog image" rounded fluid/>
             </Col>
             <Col>
               <p>

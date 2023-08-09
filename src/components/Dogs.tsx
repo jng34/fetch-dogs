@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { querySearch } from "../functions/QueryParams";
 import { Dog, DogProps } from "../types/Types";
 import { displaySize } from "../constants/Constants";
+import { baseURI } from "../constants/Constants";
 import Pagination from "./Pagination";
 import DogsTable from "./DogsTable";
 import MatchModal from "./MatchModal";
@@ -51,7 +52,7 @@ export default function Dogs({
   }
 
   function getDogObjs(dogIDarr: string[]) {
-    fetch("https://frontend-take-home-service.fetch.com/dogs", {
+    fetch(`${baseURI}/dogs`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(dogIDarr),
@@ -62,7 +63,7 @@ export default function Dogs({
   }
 
   function getDogMatch(dogIDarr: string[]) {
-    fetch("https://frontend-take-home-service.fetch.com/dogs/match", {
+    fetch(`${baseURI}/dogs/match`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(dogIDarr),

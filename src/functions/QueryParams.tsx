@@ -1,3 +1,5 @@
+import { baseURI } from "../constants/Constants";
+
 export function querySearch(
   breeds: string[],
   zipCode: string | null,
@@ -7,7 +9,7 @@ export function querySearch(
   prevEndPt?: string, 
   defaultEndPt: string = '/dogs/search?size=100&',
 ) {
-  let newURI = `https://frontend-take-home-service.fetch.com${nextEndPt || prevEndPt || defaultEndPt}`;
+  let newURI = baseURI + (nextEndPt || prevEndPt || defaultEndPt);
   newURI += breedSearch(breeds);
   if (zipCode) newURI += zipSearch(zipCode);
   if (minAge > 0) newURI += minAgeSearch(minAge);

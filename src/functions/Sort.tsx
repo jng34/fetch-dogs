@@ -1,6 +1,5 @@
   import { sortUri } from "./QueryParams";
-
-  const sortRegEx = /&sort=.+:(a|de)sc/;
+  import { sortRegEx } from "../constants/Constants";
   
   // Function that sorts by field
   export const sortFunction = (

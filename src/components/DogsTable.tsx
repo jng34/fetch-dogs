@@ -64,6 +64,7 @@ export default function DogsTable({
                 <td style={{ padding: '10px 10px' }}>
                   <Image
                     src={dogObj.img}
+                    alt="dog image"
                     style={{ width: "5rem", height: "5rem" }}
                     rounded
                   />
