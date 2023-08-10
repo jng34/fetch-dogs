@@ -2,8 +2,9 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Dog } from "../types/Types";
 import DogCard from "./DogCard";
+import { fetchPOST } from "../functions/APIs";
 
-export default function AdoptionPage() {  
+export default function Adoption() {  
   const [adoptedDog, setAdoptedDog] = useState<Dog>({
     id: '',
     name: '',
@@ -17,20 +18,11 @@ export default function AdoptionPage() {
   const { dogMatch } = state;
     
   useEffect(() => {
-    getAdoptedDog([dogMatch])
+    fetchPOST('/dogs', [dogMatch])
+      .then((res) => res.json())
+      .then((data) => setAdoptedDog(data[0]))
+      .catch(err => console.log(err))
   }, [])
   
-  function getAdoptedDog(dogIDarr: string[]) {
-    fetch("https://frontend-take-home-service.fetch.com/dogs", {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify(dogIDarr),
-      headers: { "Content-type": "application/json" },
-    })
-    .then((res) => res.json())
-    .then((data) => setAdoptedDog(data[0]))
-    .catch(err => console.log(err))
-  }
-
   return <DogCard adoptedDog={adoptedDog} />
 }

@@ -14,7 +14,7 @@ export default function DogCard({ adoptedDog }: any) {
         <p>{breed}, {age} yrs, {zip_code}</p>
       </div>
       <br/>
-      <button id="back" type="button" onClick={() => navigate("/home")}>Back to Search</button>
+      <button id="back" className="button" type="button" onClick={() => navigate("/home")}>Back to Search</button>
     </div>
   );
 }

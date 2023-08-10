@@ -5,7 +5,9 @@ import { querySearch, minAgeSearch, maxAgeSearch } from "../functions/QueryParam
 import { baseURI } from "../constants/Constants";
 import { sortFunction } from "../functions/Sort";
 import { Filters, ageFilter, breedFilter, zipCodeFilter } from "../functions/Filters";
+import { fetchGET, fetchPOST } from "../functions/APIs";
 import Dogs from "./Dogs";
+
 
 export default function Home() {
   // States 
@@ -23,46 +25,32 @@ export default function Home() {
   // Navigation
   const navigate = useNavigate();
 
-  useEffect(getBreeds, []);
-  
-  // Auth check 
-  function getBreeds() {
-    fetch(`${baseURI}/dogs/breeds`, {
-      method: "GET",
-      credentials: "include",
-      headers: { "Content-type": "application/json" },
-    })
+  useEffect(() => {
+    // Auth check 
+    fetchGET(`${baseURI}/dogs/breeds`)
       .then((res) => {
         if (res.status === 401) navigate("/");
         return res.json();
       })
       .then((data) => setDogBreeds(data));
-  }
+  }, []);
+  
 
   // Log out 
-  function handleLogOut() {
-    fetch(`${baseURI}/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-type": "application/json" },
-    }).then(() => navigate("/"));
-  };
-
+  const handleLogOut = () => fetchPOST('/auth/logout').then(() => navigate("/"));
   
-  function removeBreedFilter(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  const removeBreedFilter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const removeBreed = e.currentTarget.getAttribute("value");
-    const filteredBreeds = breeds.filter(
-      (breed: string) => breed !== removeBreed
-      );
-      setBreeds(filteredBreeds);
-      if (filteredBreeds.length === 0) {
-        return setUri(querySearch(filteredBreeds, zipCode, minAge, maxAge));
-      }
-      if (removeBreed) {
-        let newURI = uri.replace(`&breeds=${encodeURIComponent(removeBreed)}`, '');
-        setUri(newURI);
-      }
-    };
+    const filteredBreeds = breeds.filter((breed: string) => breed !== removeBreed);
+    setBreeds(filteredBreeds);
+    if (filteredBreeds.length === 0) {
+      return setUri(querySearch(filteredBreeds, zipCode, minAge, maxAge));
+    }
+    if (removeBreed) {
+      let newURI = uri.replace(`&breeds=${encodeURIComponent(removeBreed)}`, '');
+      setUri(newURI);
+    }
+};
   
   const showBreedFilters = breeds.map((breed: string, idx: number) => {
     return <Filters entry={breed} index={idx} removeBreedFilter={removeBreedFilter} /> 
@@ -71,11 +59,12 @@ export default function Home() {
   // Reset 
   const onReset = () => window.location.reload();
 
+  
   return (
     <Container>
       <header id="header">
         <h2 onClick={() => navigate('/home')}>Welcome to Fetch Dogs Adoption!</h2>&nbsp;&nbsp;&nbsp;
-        <button id="logoutButton" onClick={handleLogOut}>Log Out</button>
+        <button id="logoutButton" className="button" onClick={handleLogOut}>Log Out</button>
       </header>
       <Row>
         <Col sm={4}>
@@ -125,12 +114,12 @@ export default function Home() {
               </li>
             </ul>
           </form>
-          <br />
-          <h5>Filters</h5>
-          {showBreedFilters}
-          <button id="resetButton" type="button" onClick={onReset}>
+          <button id="resetButton" className="button" type="button" onClick={onReset}>
             Reset
           </button>
+          <br /><br />
+          <h5>Filters</h5>
+          {showBreedFilters}
         </Col>
         <Col sm={8}>
           <Dogs

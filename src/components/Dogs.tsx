@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { querySearch } from "../functions/QueryParams";
 import { Dog, DogProps } from "../types/Types";
 import { displaySize } from "../constants/Constants";
-import { baseURI } from "../constants/Constants";
 import Pagination from "./Pagination";
 import DogsTable from "./DogsTable";
 import MatchModal from "./MatchModal";
+import { fetchGET, fetchPOST } from "../functions/APIs";
 
 
 export default function Dogs({
@@ -36,11 +36,7 @@ export default function Dogs({
   }, [uri, currentPage, breeds, zipCode, minAge, maxAge]);
 
   function getDogIds(uri: string) {
-    fetch(uri, {
-      method: "GET",
-      credentials: "include",
-      headers: { "Content-type": "application/json" },
-    })
+    fetchGET(uri)
       .then((res) => res.json())
       .then((data) => {
         if (data.prev) setPrevDogsURI(data.prev);
@@ -52,23 +48,14 @@ export default function Dogs({
   }
 
   function getDogObjs(dogIDarr: string[]) {
-    fetch(`${baseURI}/dogs`, {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify(dogIDarr),
-      headers: { "Content-type": "application/json" },
-    })
+    fetchPOST('/dogs', dogIDarr)
       .then((res) => res.json())
       .then((data) => setDogObjs(data))
+      .catch(err => console.log(err))
   }
 
   function getDogMatch(dogIDarr: string[]) {
-    fetch(`${baseURI}/dogs/match`, {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify(dogIDarr),
-      headers: { "Content-type": "application/json" },
-    })
+    fetchPOST('/dogs/match', dogIDarr)
       .then((res) => res.json())
       .then((data) => setDogMatch(data.match))
       .catch(err => console.log(err))
@@ -96,7 +83,7 @@ export default function Dogs({
         Total: {totalDogs}
       </h6>
       Choose a dog or{" "}
-      <button id="matchButton" type="button" onClick={() => setToggleMatch(true)}>
+      <button id="matchButton" className="button" type="button" onClick={() => setToggleMatch(true)}>
         Match Me!
       </button>
       

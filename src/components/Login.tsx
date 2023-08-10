@@ -4,6 +4,7 @@ import { baseURI } from '../constants/Constants';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { Col, Container, Row } from 'react-bootstrap';
 import { emailCheck } from '../constants/Constants';
+import { fetchGET, fetchPOST } from '../functions/APIs';
 
 export default function Login() {
   const [name, setName] = useState('');
@@ -15,21 +16,13 @@ export default function Login() {
   const navigate = useNavigate();
   
   useEffect(() => {
-    const checkForAuth = async () => {
-      const data = await fetch(
-        `${baseURI}/dogs/breeds`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: { "Content-type": "application/json" },
-        }
-        );
+    fetchGET(`${baseURI}/dogs/breeds`)
+      .then(data => {
         if (data.status === 200) navigate('/home');
-      };
-      checkForAuth().catch(console.error);
-    },[]);
+      })
+      .catch(console.error);
+  },[]);
     
-
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setNameErr('');
@@ -37,12 +30,7 @@ export default function Login() {
     setBadEmailErr('');
     //Authenticate user
     try {
-      const auth = await fetch(`${baseURI}/auth/login`, {
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify({ name, email }),
-        headers: { 'Content-type': 'application/json' }
-      });
+      const auth = await fetchPOST(`/auth/login`, { name, email })
       if (auth.status === 200) {
         navigate("/home", { state: { name }});
       } else {
@@ -50,7 +38,8 @@ export default function Login() {
         if (!email) setEmailErr('Email is required');
         if (email && !emailCheck.test(email)) setBadEmailErr('Invalid email');
       } 
-    } catch (error) {
+    } catch (err) {
+      console.log(err)
       navigate("/error");  
     }
   }

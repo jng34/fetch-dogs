@@ -1,3 +1,8 @@
+export interface Login {
+  name: string;
+  email: string;
+}
+
 export interface Dog {
   id: string;
   img: string;
