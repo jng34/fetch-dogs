@@ -36,6 +36,8 @@ export default function DogsTable({
 
   if (isLoading) return <div>Loading dogs...</div>;
 
+  if (currentDogs.length === 0) return <div>No match</div>;
+  
   return (
     <div id="table">
       <table>
