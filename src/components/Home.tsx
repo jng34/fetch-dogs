@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { querySearch, minAgeSearch, maxAgeSearch } from "../functions/QueryParams";
-import { baseURI } from "../constants/Constants";
-import { sortFunction } from "../functions/Sort";
-import { Filters, ageFilter, breedFilter, zipCodeFilter } from "../functions/Filters";
-import { fetchGET, fetchPOST } from "../functions/APIs";
+import { querySearch, minAgeSearch, maxAgeSearch } from "../functions/queries";
+import { baseURI } from '../utils/constants';
+import { sortFunction } from "../functions/sort";
+import { ageFilter, breedFilter, zipCodeFilter } from "../functions/searchFilters";
+import { fetchGET, fetchPOST } from "../functions/fetch";
+import Filters from "./Filters";
 import Dogs from "./Dogs";
 
 

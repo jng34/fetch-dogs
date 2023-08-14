@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { Pagination } from "../types/Types";
-import { DOTS } from "../constants/Constants";
+import { Pagination } from "../utils/types";
+import { DOTS } from "../utils/constants";
 
 export function range(start: number, end: number) {
   let length = end - start + 1;

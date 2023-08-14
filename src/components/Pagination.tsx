@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import { usePagination } from '../functions/usePagination';
-import { DOTS } from '../constants/Constants';
-import { PageProps } from '../types/Types';
+import { usePagination } from '../hooks/usePagination';
+import { DOTS } from '../utils/constants';
+import { PageProps } from '../utils/types';
 
 export default function Pagination(props: PageProps) {
   const {

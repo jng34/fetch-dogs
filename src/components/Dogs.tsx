@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { querySearch } from "../functions/QueryParams";
-import { Dog, DogProps } from "../types/Types";
-import { displaySize } from "../constants/Constants";
+import { querySearch } from "../functions/queries";
+import { Dog, DogProps } from "../utils/types";
+import { displaySize } from "../utils/constants";
 import Pagination from "./Pagination";
 import DogsTable from "./DogsTable";
 import MatchModal from "./MatchModal";
-import { fetchGET, fetchPOST } from "../functions/APIs";
+import { fetchGET, fetchPOST } from "../functions/fetch";
 
 
 export default function Dogs({

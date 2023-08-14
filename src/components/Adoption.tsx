@@ -1,8 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Dog } from "../types/Types";
+import { Dog } from "../utils/types";
 import DogCard from "./DogCard";
-import { fetchPOST } from "../functions/APIs";
+import { fetchPOST } from "../functions/fetch";
 
 export default function Adoption() {  
   const [adoptedDog, setAdoptedDog] = useState<Dog>({

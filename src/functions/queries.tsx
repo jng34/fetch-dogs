@@ -1,4 +1,4 @@
-import { baseURI } from "../constants/Constants";
+import { baseURI } from "../utils/constants";
 
 export function querySearch(
   breeds: string[],

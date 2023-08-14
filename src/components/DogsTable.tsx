@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Image } from "react-bootstrap";
-import { Dog, DogTableProps } from "../types/Types";
+import { Dog, DogTableProps } from "../utils/types";
 import DogModal from "./DogModal";
 
 export default function DogsTable({

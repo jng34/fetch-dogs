@@ -1,5 +1,5 @@
-  import { sortUri } from "./QueryParams";
-  import { sortRegEx } from "../constants/Constants";
+  import { sortUri } from "./queries";
+  import { sortRegEx } from "../utils/constants";
   
   // Function that sorts by field
   export const sortFunction = (

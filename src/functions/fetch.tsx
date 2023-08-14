@@ -1,5 +1,5 @@
-import { baseURI } from "../constants/Constants"
-import { Login } from "../types/Types";
+import { baseURI } from "../utils/constants"
+import { Login } from "../utils/types";
 
 // GET method
 export const fetchGET = (uri: string) => {

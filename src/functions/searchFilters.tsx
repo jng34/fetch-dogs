@@ -1,24 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { FilterProps } from "../types/Types";
-import { breedSearch, zipSearch } from "./QueryParams";
-
-// Render filters component
-export const Filters = ({ entry, index, removeBreedFilter }: FilterProps) => {
-  return (
-    <div key={index}>
-      <button
-        type="button"
-        className="deleteButton"
-        value={entry}
-        onClick={(e) => removeBreedFilter(e)}
-      >
-        X
-      </button>
-      &nbsp;
-      <span>{entry}</span>
-    </div>
-  );
-}
+import { breedSearch, zipSearch } from "./queries";
 
 // Breed filter function
 export const breedFilter = (

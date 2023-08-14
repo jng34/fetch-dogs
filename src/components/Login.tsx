@@ -1,10 +1,10 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { baseURI } from '../constants/Constants';
+import { baseURI } from '../utils/constants';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { Col, Container, Row } from 'react-bootstrap';
-import { emailCheck } from '../constants/Constants';
-import { fetchGET, fetchPOST } from '../functions/APIs';
+import { emailCheck } from '../utils/constants';
+import { fetchGET, fetchPOST } from '../functions/fetch';
 
 export default function Login() {
   const [name, setName] = useState('');
