@@ -11,6 +11,7 @@ export default function DogsTable({
   onSortName,
   onSortAge,
   onSortBreed,
+  isLoading, 
 }: DogTableProps) {
   const [toggleModal, setToggleModal] = useState<boolean>(false);
   const [modalData, setModalData] = useState<Dog>({
@@ -31,6 +32,9 @@ export default function DogsTable({
       : (firstPageIndex + displaySize);
     return dogObjs.slice(firstPageIndex, lastPageIndex);
   }, [dogObjs, currentPage, toggleMatch]);
+
+
+  if (isLoading) return <div>Loading dogs...</div>;
 
   return (
     <div id="table">

@@ -40,6 +40,7 @@ export interface DogTableProps {
   onSortName: (arg: any) => void;
   onSortAge: (arg: any) => void;
   onSortBreed: (arg: any) => void;
+  isLoading: boolean;
 }
 
 export interface DogModalProps {

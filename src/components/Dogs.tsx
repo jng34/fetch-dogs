@@ -30,12 +30,14 @@ export default function Dogs({
   const [totalDogs, setTotalDogs] = useState<number>(0);
   const [prevDogsURI, setPrevDogsURI] = useState<string>("");
   const [nextDogsURI, setNextDogsURI] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     getDogIds(uri);
   }, [uri, currentPage, breeds, zipCode, minAge, maxAge]);
 
   function getDogIds(uri: string) {
+    setIsLoading(true);
     fetchGET(uri)
       .then((res) => res.json())
       .then((data) => {
@@ -44,6 +46,7 @@ export default function Dogs({
         setTotalDogs(data.total);
         getDogObjs(data.resultIds);
         getDogMatch(data.resultIds);
+        setIsLoading(false);
       });
   }
 
@@ -106,6 +109,7 @@ export default function Dogs({
           onSortName={onSortName}
           onSortAge={onSortAge}
           onSortBreed={onSortBreed}
+          isLoading={isLoading}
         />
         <Pagination
           className="pagination-bar"
