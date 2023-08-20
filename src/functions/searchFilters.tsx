@@ -9,7 +9,9 @@ export const breedFilter = (
   uri: string,
   setUri: Dispatch<SetStateAction<string>>,
   setCurrentPage: Dispatch<SetStateAction<number>>, 
+  setSelected: Dispatch<SetStateAction<string>>, 
 ) => {
+  setSelected(selectBreed);
   if (selectBreed !== 'none' && !breeds.includes(selectBreed)) {
     const breedArr: string[] = [...breeds, selectBreed];
     setBreeds(breedArr);

@@ -6,13 +6,15 @@ import { baseURI } from '../utils/constants';
 import { sortFunction } from "../functions/sort";
 import { ageFilter, breedFilter, zipCodeFilter } from "../functions/searchFilters";
 import { fetchGET, fetchPOST } from "../functions/fetch";
+import { HomeProps } from "../utils/types";
 import Filters from "./Filters";
 import Dogs from "./Dogs";
 
 
-export default function Home() {
+export default function Home({ name }: HomeProps) {
   // States 
   const [dogBreeds, setDogBreeds] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string>('');
   const [breeds, setBreeds] = useState<string[]>([]);
   const [zipCode, setZipCode] = useState<string>("");
   const [minAge, setMinAge] = useState<number>(0);
@@ -58,13 +60,21 @@ export default function Home() {
   });
     
   // Reset 
-  const onReset = () => window.location.reload();
-
+  //Configure
+  const onReset = () => {
+    Array.from(document.querySelectorAll('input')).forEach(input => input.value = '');
+    setUri(`${baseURI}/dogs/search?size=100&sort=breed:asc`);
+    setSelected('none');
+    setBreeds([]);
+    setMinAge(0);
+    setMaxAge(0);
+    setZipCode('');
+  }
   
   return (
     <Container>
       <header id="header">
-        <h2 onClick={() => navigate('/home')}>Welcome to Fetch Dogs Adoption!</h2>&nbsp;&nbsp;&nbsp;
+        <h2 onClick={() => navigate('/home')}>Welcome to Fetch Dogs Adoption, {name}!</h2>&nbsp;&nbsp;&nbsp;
         <button id="logoutButton" className="button" onClick={handleLogOut}>Log Out</button>
       </header>
       <Row>
@@ -74,7 +84,7 @@ export default function Home() {
             <ul className="form-wrapper">
               <li className="form-row">
                 <label htmlFor="breed">Breed:&nbsp;&nbsp;</label>
-                <select name={"breeds"} onChange={(e) => breedFilter(e.target.value, breeds, setBreeds, uri, setUri, setCurrentPage)}>
+                <select name={"breeds"} value={selected} onChange={(e) => breedFilter(e.target.value, breeds, setBreeds, uri, setUri, setCurrentPage, setSelected)}>
                   <option value='none'>---Select---</option>
                   {dogBreeds.map((breed, idx) => (
                     <option key={idx} value={breed}>

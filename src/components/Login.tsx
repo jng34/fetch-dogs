@@ -5,9 +5,10 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import { Col, Container, Row } from 'react-bootstrap';
 import { emailCheck } from '../utils/constants';
 import { fetchGET, fetchPOST } from '../functions/fetch';
+import { LoginProps } from '../utils/types';
 
-export default function Login() {
-  const [name, setName] = useState('');
+export default function Login({ name, setName }: LoginProps) {
+  // const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [nameErr, setNameErr] = useState('');
   const [emailErr, setEmailErr] = useState('');
@@ -66,16 +67,16 @@ export default function Login() {
         <form onSubmit={handleLogin}>
           <label>Name</label><br/>
           <input type='text' value={name} onChange={(e) => setName(e.target.value)}></input>
-          <br/>
+            <br/>
           {nameErr ? <span style={{ color: 'red' }}>{nameErr}</span> : <></>}
-          <br/>
+            <br/>
           <label>Email</label>
-          <br/>
+            <br/>
           <input type='text' value={email} onChange={(e) => setEmail(e.target.value)}></input>
-          <br/>
+            <br/>
           {emailErr ? <span style={{ color: 'red' }}>{emailErr}</span> : <></>}
           {badEmailErr ? <span style={{ color: 'red' }}>{badEmailErr}</span> : <></>}          
-          <br/>
+            <br/>
           <button type='submit'>Submit</button>
         </form>
       </Row>

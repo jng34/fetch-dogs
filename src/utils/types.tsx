@@ -3,6 +3,11 @@ export interface Login {
   email: string;
 }
 
+export interface LoginProps {
+  name: string;
+  setName: (arg: any) => void;
+}
+
 export interface Dog {
   id: string;
   img: string;
@@ -53,6 +58,10 @@ export interface FilterProps {
   entry: string;
   index: number;
   removeBreedFilter: (arg: any) => void;
+}
+
+export interface HomeProps {
+  name: string;
 }
 
 export interface MatchProps {
